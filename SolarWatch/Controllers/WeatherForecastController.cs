@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace SolarWatch.Controllers;
-
+a
 [ApiController]
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase

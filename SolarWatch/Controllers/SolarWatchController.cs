@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SolarWatch.Exceptions;
 using SolarWatch.Services;
 using SolarWatch.Services.JsonParsers;
 
@@ -25,14 +26,22 @@ public class SolarWatchController : ControllerBase
     }
 
     [HttpGet(Name = "GetSolarWatchRoute")]
-    public ActionResult<City> GetSolarInfos(string cityName, DateOnly date)
+    public async Task<ActionResult<City>> GetSolarInfos(string cityName, DateOnly date)
     {
         try
         {
-            var cityJson = _cityDataProvider.GetCityData(cityName);
+            var cityJson = await _cityDataProvider.GetCityData(cityName);
             var city = _cityParser.Process(cityJson);
-            var solarJson = _solarInfoProvider.GetSolarData(city.Latitude, city.Longitude, date);
+            var solarJson = await _solarInfoProvider.GetSolarData(city.Latitude, city.Longitude, date);
             return Ok(_solarParser.Process(solarJson));
+        }
+        catch (CityDataException)
+        {
+            return NotFound("City not found");
+        }
+        catch (SolarDataException)
+        {
+            return BadRequest("Solar data could not be retrieved");
         }
         catch (Exception ex)
         {

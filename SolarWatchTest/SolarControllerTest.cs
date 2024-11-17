@@ -29,24 +29,24 @@ public class SolarControllerTest
     }
 
     [Test]
-    public void GetSolarInfosReturnsNotFoundWhenCityApiFailed()
+    public async Task GetSolarInfosReturnsNotFoundWhenCityApiFailed()
     {
         _cityApiReader.Setup(x => x.GetCityData(It.IsAny<string>())).Throws(new Exception());
-        var result = _controller.GetSolarInfos("budapest", new DateOnly(2021, 12, 10));
+        var result = await _controller.GetSolarInfos("budapest", new DateOnly(2021, 12, 10));
         Assert.IsInstanceOf(typeof(NotFoundObjectResult), result.Result);
     }
 
     [Test]
-    public void TestWithCorrectCityNameAndDate()
+    public async Task TestWithCorrectCityNameAndDate()
     {
         var city = new City(12.12, 12.12);
         var solar = new Solar("12:12", "10:10");
-        _cityApiReader.Setup(x => x.GetCityData(It.IsAny<string>())).Returns("city");
+        _cityApiReader.Setup(x => x.GetCityData(It.IsAny<string>())).ReturnsAsync("city");
         _cityParser.Setup(x => x.Process(It.IsAny<string>())).Returns(city);
         _solarInfoReader.Setup(x => x.GetSolarData(It.IsAny<Double>(), It.IsAny<Double>(), It.IsAny<DateOnly>()))
-            .Returns("string");
+            .ReturnsAsync("string");
         _solarParser.Setup(x => x.Process(It.IsAny<String>())).Returns(solar);
-        var result = _controller.GetSolarInfos("budapest", new DateOnly(2021, 12, 10));
+        var result = await _controller.GetSolarInfos("budapest", new DateOnly(2021, 12, 10));
         Assert.IsInstanceOf(typeof(OkObjectResult), result.Result);
     }
     

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Moq;
 using SolarWatch;
 using SolarWatch.Controllers;
@@ -45,22 +46,30 @@ public class SolarControllerTest
     public async Task TestWithCorrectCityNameAndDateWithDataInDb()
     {
         City city = new City();
+        Solar solar = new Solar();
         _cityRepository.Setup(x => x.GetByName(It.IsAny<string>())).Returns(city);
+        _solarRepository.Setup(x => x.Get(It.IsAny<DateOnly>(), It.IsAny<int>())).Returns(solar);
         var result = await _controller.GetSolarInfos("budapest", new DateOnly(2021, 12, 10));
         Assert.IsInstanceOf(typeof(OkObjectResult), result.Result);
+        Assert.That(((OkObjectResult)result.Result).Value, Is.EqualTo(solar));
     }
 
     [Test]
     public async Task TestWithCorrectCityAndDateWithoutDataInDb()
     {
         City city = new City();
+        Solar solar = new Solar();
         // returns null because we don't have this data in our DB yet.
         _cityRepository.Setup(x => x.GetByName(It.IsAny<string>())).Returns((City?)null);
         // Get the data from API instead
         _cityApiReader.Setup(x => x.GetCityData(It.IsAny<string>())).ReturnsAsync("city");
         _cityParser.Setup(x => x.Process(It.IsAny<string>())).Returns(city);
+        _solarInfoReader.Setup(x => x.GetSolarData(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<DateOnly>()))
+            .ReturnsAsync("solar");
+        _solarParser.Setup(x => x.Process(It.IsAny<string>(), It.IsAny<City>(), It.IsAny<DateOnly>())).Returns(solar);
         var result = await _controller.GetSolarInfos("budapest", new DateOnly(2021, 12, 10));
         Assert.IsInstanceOf(typeof(OkObjectResult), result.Result);
+        Assert.That(((OkObjectResult)result.Result).Value, Is.EqualTo(solar));
     }
     
     

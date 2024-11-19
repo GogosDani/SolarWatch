@@ -1,8 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+using SolarWatch.Data;
 using SolarWatch.Services;
 using SolarWatch.Services.JsonParsers;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var connectionString = builder.Configuration.GetConnectionString("Default");
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -13,6 +15,11 @@ builder.Services.AddSingleton<ICityParser, CityProcessor>();
 builder.Services.AddSingleton<ICityDataProvider, CityApiReader>();
 builder.Services.AddSingleton<ISolarParser, SolarProcessor>();
 builder.Services.AddSingleton<ISolarInfoProvider, SolarInfoReader>();
+
+builder.Services.AddDbContext<SolarApiContext>(options =>
+{
+    options.UseSqlServer(connectionString);
+});
 
 var app = builder.Build();
 

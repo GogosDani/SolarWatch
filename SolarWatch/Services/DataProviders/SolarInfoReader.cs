@@ -19,6 +19,5 @@ public class SolarInfoReader : ISolarInfoProvider
         {
             throw new SolarDataException("Couldn't get solar datas");
         }
-      
     }
 }

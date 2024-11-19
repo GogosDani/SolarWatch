@@ -5,6 +5,7 @@ using SolarWatch;
 using SolarWatch.Controllers;
 using SolarWatch.Services;
 using SolarWatch.Services.JsonParsers;
+using SolarWatch.Services.Repositories;
 
 namespace SolarWatchTest;
 
@@ -16,6 +17,8 @@ public class SolarControllerTest
     private Mock<ICityParser> _cityParser;
     private Mock<ISolarParser> _solarParser;
     private SolarWatchController _controller;
+    private Mock<ICityRepository> _cityRepository;
+    private Mock<ISolarRepository> _solarRepository;
 
     [SetUp]
     public void Setup()
@@ -25,7 +28,9 @@ public class SolarControllerTest
         _cityParser = new Mock<ICityParser>();
         _solarParser = new Mock<ISolarParser>();
         _mockLogger = new Mock<ILogger<SolarWatchController>>();
-        _controller = new SolarWatchController(_mockLogger.Object, _cityApiReader.Object, _cityParser.Object, _solarInfoReader.Object, _solarParser.Object);
+        _cityRepository = new Mock<ICityRepository>();
+        _solarRepository = new Mock<ISolarRepository>();
+        _controller = new SolarWatchController(_mockLogger.Object, _cityApiReader.Object, _cityParser.Object, _solarInfoReader.Object, _solarParser.Object, _solarRepository.Object, _cityRepository.Object);
     }
 
     [Test]
@@ -37,15 +42,23 @@ public class SolarControllerTest
     }
 
     [Test]
-    public async Task TestWithCorrectCityNameAndDate()
+    public async Task TestWithCorrectCityNameAndDateWithDataInDb()
     {
-        var city = new City(12.12, 12.12);
-        var solar = new Solar("12:12", "10:10");
+        City city = new City();
+        _cityRepository.Setup(x => x.GetByName(It.IsAny<string>())).Returns(city);
+        var result = await _controller.GetSolarInfos("budapest", new DateOnly(2021, 12, 10));
+        Assert.IsInstanceOf(typeof(OkObjectResult), result.Result);
+    }
+
+    [Test]
+    public async Task TestWithCorrectCityAndDateWithoutDataInDb()
+    {
+        City city = new City();
+        // returns null because we don't have this data in our DB yet.
+        _cityRepository.Setup(x => x.GetByName(It.IsAny<string>())).Returns((City?)null);
+        // Get the data from API instead
         _cityApiReader.Setup(x => x.GetCityData(It.IsAny<string>())).ReturnsAsync("city");
         _cityParser.Setup(x => x.Process(It.IsAny<string>())).Returns(city);
-        _solarInfoReader.Setup(x => x.GetSolarData(It.IsAny<Double>(), It.IsAny<Double>(), It.IsAny<DateOnly>()))
-            .ReturnsAsync("string");
-        _solarParser.Setup(x => x.Process(It.IsAny<String>())).Returns(solar);
         var result = await _controller.GetSolarInfos("budapest", new DateOnly(2021, 12, 10));
         Assert.IsInstanceOf(typeof(OkObjectResult), result.Result);
     }

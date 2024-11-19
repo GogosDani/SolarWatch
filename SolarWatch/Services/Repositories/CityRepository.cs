@@ -28,10 +28,11 @@ public class CityRepository : ICityRepository
         _context.SaveChanges();
     }
 
-    public void Add(City city)
+    public int Add(City city)
     {
         _context.Add(city);
         _context.SaveChanges();
+        return city.Id;
     }
 
     public void Delete(City city)

@@ -36,27 +36,28 @@ public class SolarWatchController : ControllerBase
         try
         {
             var city = _cityRepository.GetByName(cityName);
+            Solar solarData = null;
             // city can be null now, if there isn't any data for that city in the DB
             if (city == null)
             {
-                // Console.WriteLine("Used foreign API for city");
+                // Get the city data from the API
                 var cityJson = await _cityDataProvider.GetCityData(cityName);
                 city = _cityParser.Process(cityJson);
-                _cityRepository.Add(city);
-                city = _cityRepository.GetByName(cityName);
+                var cityId = _cityRepository.Add(city);
+                // If we added the city to the DB just now, we should get the solar data from te API too.
+                solarData = await GetSolarDataFromApi(city, date);
             }
-    
-            var solarData = _solarRepository.Get(date, city.Id);
-            // solarData can be null now, if there isn't any data for that info in the DB
-            if (solarData == null)
+            // If we got the city from DB
+            else
             {
-                // Console.WriteLine("Used foreign API for solar");
-                var solarJson = await _solarInfoProvider.GetSolarData(city.Latitude, city.Longitude, date);
-                var parsedSolar = _solarParser.Process(solarJson, city, date);
-                _solarRepository.Add(parsedSolar);
+                // Try to get the solar data from the DB too.
                 solarData = _solarRepository.Get(date, city.Id);
+                if (solarData == null)
+                {
+                    solarData = await GetSolarDataFromApi(city, date);
+                }
             }
-           
+            
             return Ok(solarData);
         }
         catch (CityDataException)
@@ -74,4 +75,14 @@ public class SolarWatchController : ControllerBase
         
     }
     
+    
+    private async Task<Solar> GetSolarDataFromApi(City city, DateOnly date)
+    {
+        var solarJson = await _solarInfoProvider.GetSolarData(city.Latitude, city.Longitude, date);
+        var parsedSolar = _solarParser.Process(solarJson, city, date);
+        _solarRepository.Add(parsedSolar);
+        return parsedSolar;
+    }
 }
+
+

@@ -75,6 +75,34 @@ public class SolarWatchController : ControllerBase
         }
         
     }
+
+    [HttpPost("City")]
+    public async Task<ActionResult> Post([FromBody] City city)
+    {
+        try
+        {
+            _cityRepository.Add(city);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("SolarInfo")]
+    public async Task<ActionResult> Post([FromBody] Solar solar)
+    {
+        try
+        {
+            _solarRepository.Add(solar);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
     
     
     private async Task<Solar> GetSolarDataFromApi(City city, DateOnly date)

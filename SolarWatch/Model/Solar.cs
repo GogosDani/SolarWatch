@@ -7,5 +7,5 @@ public class Solar
     public string Sunset { get; init; }
     public DateOnly Date { get; init; }
     public int CityId { get; init; }
-    public City City { get; init; }
+    public City? City { get; init; }
 }

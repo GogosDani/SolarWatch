@@ -23,6 +23,10 @@ builder.Services.AddDbContext<SolarApiContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
+builder.Services.AddDbContext<UsersContext>(options =>
+{
+    options.UseSqlServer(connectionString);
+});
 
 var app = builder.Build();
 

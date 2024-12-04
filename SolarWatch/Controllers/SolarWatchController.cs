@@ -31,7 +31,7 @@ public class SolarWatchController : ControllerBase
         _solarRepository = solarRepository;
     }
 
-    [HttpGet(Name = "GetSolarWatchRoute"), Authorize]
+    [HttpGet(Name = "GetSolarWatchRoute"), Authorize(Roles = "User, Admin")]
     public async Task<ActionResult<City>> GetSolarInfos(string cityName, DateOnly date)
     {
         try
@@ -76,7 +76,7 @@ public class SolarWatchController : ControllerBase
         
     }
 
-    [HttpPost("City")]
+    [HttpPost("City"), Authorize(Roles = "Admin")]
     public async Task<ActionResult> Post([FromBody] City city)
     {
         try
@@ -90,7 +90,7 @@ public class SolarWatchController : ControllerBase
         }
     }
 
-    [HttpPost("SolarInfo")]
+    [HttpPost("SolarInfo"), Authorize(Roles = "Admin")]
     public async Task<ActionResult> Post([FromBody] Solar solar)
     {
         try

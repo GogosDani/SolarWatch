@@ -30,6 +30,12 @@ AddIdentity();
 
 // Middlewares
 var app = builder.Build();
+
+using var scope = app.Services.CreateScope(); 
+var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
+authenticationSeeder.AddRoles();
+authenticationSeeder.AddAdmin();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -58,6 +64,7 @@ void AddServices()
     builder.Services.AddScoped<IAuthService, AuthService>();
     builder.Services.AddSingleton(new JwtSettings { SecretKey = jwtSecretKey });
     builder.Services.AddScoped<ITokenService, TokenService>();
+    builder.Services.AddScoped<AuthenticationSeeder>();
 
 }
 
@@ -139,5 +146,6 @@ void AddIdentity()
             options.Password.RequireUppercase = false;
             options.Password.RequireLowercase = false;
         })
+        .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<UsersContext>();
 }

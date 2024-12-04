@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolarWatch.Exceptions;
 using SolarWatch.Services;
@@ -30,7 +31,7 @@ public class SolarWatchController : ControllerBase
         _solarRepository = solarRepository;
     }
 
-    [HttpGet(Name = "GetSolarWatchRoute")]
+    [HttpGet(Name = "GetSolarWatchRoute"), Authorize]
     public async Task<ActionResult<City>> GetSolarInfos(string cityName, DateOnly date)
     {
         try

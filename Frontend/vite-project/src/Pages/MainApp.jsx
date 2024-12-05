@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import api from "../Axios/api"
 
 export default function MainApp() {
 
@@ -7,8 +8,13 @@ export default function MainApp() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        const response = await fetch(`https://localhost:44325/SolarWatch?cityName=${city}&date=${date}`);
-        const data = await response.json();
+        const response = await api.get("/SolarWatch", {
+            params: {
+                cityName: city,
+                date: date
+            }
+        });
+        const data = response.data;
         console.log(data);
     }
 

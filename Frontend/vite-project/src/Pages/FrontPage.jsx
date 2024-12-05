@@ -20,6 +20,8 @@ export default function Page() {
             })
         })
         if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem('token', data.token);
             navigate("/app")
         }
     }

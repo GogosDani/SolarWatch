@@ -27,14 +27,12 @@ ConfigureSwagger();
 AddDbContexts();
 AddAuthentication();
 AddIdentity();
+AddCors();
 
 // Middlewares
 var app = builder.Build();
 
-using var scope = app.Services.CreateScope(); 
-var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
-authenticationSeeder.AddRoles();
-authenticationSeeder.AddAdmin();
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -45,6 +43,12 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseCors("AllowFrontend");
+
+using var scope = app.Services.CreateScope(); 
+var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
+authenticationSeeder.AddRoles();
+authenticationSeeder.AddAdmin();
 app.Run();
 
 
@@ -148,4 +152,17 @@ void AddIdentity()
         })
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<UsersContext>();
+}
+
+void AddCors()
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowFrontend",
+            builder => builder
+                .WithOrigins("http://localhost:4000")
+                .AllowAnyHeader()
+                .AllowAnyMethod());
+    });
+
 }

@@ -10,13 +10,7 @@ services:
       context: ./SolarWatch
       dockerfile: Dockerfile
     environment:
-      - CONNECTIONSTRINGS__DEFAULT=Server=db;User Id=sa;Password=Kokikutya0123!;Encrypt=false;
+      - CONNECTIONSTRINGS__DEFAULT=Server=localhost,11433;Database=SolarWatch;User Id=sa;Password=pwd;Encrypt=false;
     ports:
       - 8080:8080
-  db:
-    image: mcr.microsoft.com/mssql/server
-    environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=Kokikutya0123!
-    ports:
-      - 1433:1433
+  

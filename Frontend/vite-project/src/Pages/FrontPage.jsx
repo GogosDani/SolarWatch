@@ -14,8 +14,8 @@ export default function Page() {
                 <button className="auth-buttons" onClick={() => setRegister(prev => !prev)}> Register </button>
                 <button className="auth-buttons" onClick={() => setLogin(prev => !prev)}> Login </button>
             </div>
-            {login ? <LoginComponent /> : ""}
-            {register ? <RegisterComponent handleRegister={handleRegister} /> : ""}
+            {login ? <LoginComponent handleLogin={handleLogin} setLogin={setLogin} /> : ""}
+            {register ? <RegisterComponent handleRegister={handleRegister} setRegister={setRegister} /> : ""}
         </div>
 
 
@@ -38,6 +38,18 @@ async function handleRegister(userData, e) {
     console.log(data);
 }
 
-function handleLogin(userData) {
-
+async function handleLogin(userData, e) {
+    e.preventDefault();
+    const response = await fetch("https://localhost:44325/Auth/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            password: userData.password,
+            email: userData.email
+        })
+    })
+    const data = await response.json();
+    console.log(data);
 }

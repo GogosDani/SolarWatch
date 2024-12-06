@@ -19,14 +19,21 @@ export default function MainApp() {
     }
 
     return (
-        <div className="search-form-div">
-            <form onSubmit={(e) => handleSubmit(e)}>
-                <label> Type a city here </label>
-                <input required onChange={(e) => setCity(e.target.value)} />
-                <label> Add the date </label>
-                <input required onChange={(e) => setDate(e.target.value)} type="date" />
-                <button disabled={city === "" ? true : false}> Submit </button>
-            </form>
+        <div className="main-app-div">
+            <div className="search-form-div">
+                <p className="title-solar"> SolarWatch </p>
+                <form className="search-form" onSubmit={(e) => handleSubmit(e)}>
+                    <label className="search-form-label"> Type a city here </label>
+                    <input className="search-form-input" required onChange={(e) => setCity(e.target.value)} />
+                    <label className="search-form-label"> Add the date </label>
+                    <input className="search-form-input" required onChange={(e) => setDate(e.target.value)} type="date" />
+                    <button className="search-submit" disabled={city === "" ? true : false}> Submit </button>
+                </form>
+            </div>
+            <div className="solar-info-div">
+                <h2> INFOS </h2>
+            </div>
         </div>
+
     )
 }

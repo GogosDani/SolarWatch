@@ -1,3 +1,11 @@
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     background-image: url("./src/Pics/background.jpg");
     background-size: cover;
@@ -52,7 +60,7 @@ body {
     cursor: pointer;
 }
 
-form {
+.auth-form {
     height: 35.625rem;
     width: 25rem;
     background-color: rgba(255, 255, 255, 0.13);
@@ -65,9 +73,10 @@ form {
     border: 2px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
     padding: 50px 35px;
+
 }
 
-form * {
+.auth-form * {
     font-family: 'Poppins', sans-serif;
     color: #ffffff;
     letter-spacing: 0.5px;
@@ -75,14 +84,14 @@ form * {
     border: none;
 }
 
-label {
+.auth-label {
     display: block;
     margin-top: 30px;
     font-size: 16px;
     font-weight: 500;
 }
 
-input {
+.auth-input {
     display: block;
     height: 50px;
     width: 100%;
@@ -120,4 +129,99 @@ input {
     font-weight: 600;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.search-form {
+    width: 90%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    align-items: center;
+}
+
+.search-form * {
+    font-family: 'Poppins', sans-serif;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+}
+
+.search-form-label {
+    display: block;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.search-form-input {
+    display: block;
+    height: 50px;
+    width: 100%;
+    background-color: rgba(49, 186, 190, 0.2);
+    border-radius: 3px;
+    padding: 0 10px;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.search-submit {
+    --bg: #e74c3c;
+    --text-color: #fff;
+    position: relative;
+    width: 150px;
+    border: none;
+    background: var(--bg);
+    color: var(--text-color);
+    padding: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.2s;
+    border-radius: 5px;
+    opacity: 0.8;
+    letter-spacing: 1px;
+    box-shadow: #c0392b 0px 7px 2px, #000 0px 8px 5px;
+    font-size: 1rem;
+}
+
+.search-submit:hover {
+    opacity: 1;
+}
+
+.search-submit:active {
+    top: 4px;
+    box-shadow: #c0392b 0px 3px 2px, #000 0px 3px 5px;
+}
+
+.title-solar {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0px;
+    height: 20%;
+}
+
+.search-form-div {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+    height: 70%;
+}
+
+.main-app-div {
+    height: 90%;
+    width: 90%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    top: 2rem;
+    background-color: rgba(255, 255, 255, 0.13);
+}
+
+.solar-info-div {
+    height: 30%;
+    border-top: solid 2px black;
 }

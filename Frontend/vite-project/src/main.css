@@ -152,17 +152,20 @@ body {
     display: block;
     font-size: 22px;
     font-weight: 500;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .search-form-input {
     display: block;
     height: 50px;
     width: 100%;
-    background-color: rgba(49, 186, 190, 0.2);
+    background-color: #FFFACD;
+    border: 1px solid #FFD700;
+    color: #333333;
     border-radius: 3px;
     padding: 0 10px;
     margin-top: 8px;
-    font-size: 14px;
+    font-size: 25px;
     font-weight: 300;
 }
 
@@ -200,6 +203,7 @@ body {
     font-weight: bold;
     margin: 0px;
     height: 20%;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .search-form-div {

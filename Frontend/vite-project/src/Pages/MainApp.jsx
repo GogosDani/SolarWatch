@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import api from "../Axios/api"
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 
 export default function MainApp() {
@@ -10,6 +11,7 @@ export default function MainApp() {
     const [city, setCity] = useState("");
     const [date, setDate] = useState("");
     const [info, setInfo] = useState({});
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -21,6 +23,18 @@ export default function MainApp() {
         }
     }, [navigate])
 
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            console.log(decodedToken);
+            if (decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
+                == "Admin") {
+                setIsAdmin(true);
+            }
+        }
+    }, [])
+
     async function handleSubmit(e) {
         e.preventDefault();
         const response = await api.get("/SolarWatch", {
@@ -30,12 +44,12 @@ export default function MainApp() {
             }
         });
         const data = response.data;
-        console.log(data);
         setInfo(data);
     }
 
     return (
         <>
+            {isAdmin && <button className="admin-button"> ADMIN INTERFACE </button>}
             {errorMessage ? (<h1 className="error-message"> {errorMessage} </h1>) : (
 
                 <div className="main-app-div">

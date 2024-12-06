@@ -225,7 +225,51 @@ body {
     background-color: rgba(255, 255, 255, 0.13);
 }
 
+
+
+
+
+
+
 .solar-info-div {
     height: 30%;
     border-top: solid 2px black;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.solar-info-top {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.solar-info-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    color: #FFD700;
+    font-weight: bold;
+}
+
+.left,
+.right {
+    font-size: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.solar-data {
+    margin: 5px;
+}
+
+.city-info {
+    font-size: 2rem;
+    margin: 5px;
+    color: #FFD700;
+    font-weight: bold;
 }

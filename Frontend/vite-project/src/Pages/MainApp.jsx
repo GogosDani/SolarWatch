@@ -5,6 +5,12 @@ export default function MainApp() {
 
     const [city, setCity] = useState("");
     const [date, setDate] = useState("");
+    const [info, setInfo] = useState({});
+
+    useEffect(() => {
+        console.log("------------------asd-------------------")
+        console.log(info)
+    }, [info])
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -16,6 +22,7 @@ export default function MainApp() {
         });
         const data = response.data;
         console.log(data);
+        setInfo(data);
     }
 
     return (
@@ -31,7 +38,24 @@ export default function MainApp() {
                 </form>
             </div>
             <div className="solar-info-div">
-                <h2> INFOS </h2>
+                {Object.keys(info).length == 0 ? "" : (
+                    <>
+                        <div className="solar-info-top">
+                            <p className="city-info"> {info.city.name} - {info.date}</p>
+                        </div>
+                        <div className="solar-info-bottom">
+                            <div className="left">
+                                <p className="solar-data"> {info.sunrise} </p>
+                                <p className="solar-data"> SUNRISE </p>
+                            </div>
+                            <div className="right">
+                                <p className="solar-data"> {info.sunset} </p>
+                                <p className="solar-data"> SUNSET </p>
+                            </div>
+                        </div>
+                    </>
+                )
+                }
             </div>
         </div>
 

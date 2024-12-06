@@ -273,3 +273,11 @@ body {
     color: #FFD700;
     font-weight: bold;
 }
+
+.error-message {
+    font-size: 5rem;
+    color: red;
+    font-weight: bold;
+    position: relative;
+    top: 10rem;
+}

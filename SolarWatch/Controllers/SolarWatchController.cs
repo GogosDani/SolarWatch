@@ -76,7 +76,7 @@ public class SolarWatchController : ControllerBase
         
     }
 
-    [HttpPost("City")]
+    [HttpPost("City"), Authorize(Roles = "admin")]
     public async Task<ActionResult> Post([FromBody] City city)
     {
         try
@@ -90,12 +90,40 @@ public class SolarWatchController : ControllerBase
         }
     }
 
-    [HttpPost("SolarInfo")]
+    [HttpPost("SolarInfo"), Authorize(Roles = "admin")]
     public async Task<ActionResult> Post([FromBody] Solar solar)
     {
         try
         {
             _solarRepository.Add(solar);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("SolarInfo"), Authorize(Roles = "admin")]
+    public async Task<ActionResult> DeleteSolar(int id)
+    {
+        try
+        {
+            _solarRepository.Delete(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    
+    [HttpDelete("City"), Authorize(Roles = "admin")]
+    public async Task<ActionResult> DeleteCity(int id)
+    {
+        try
+        {
+            _cityRepository.Delete(id);
             return Ok();
         }
         catch (Exception ex)

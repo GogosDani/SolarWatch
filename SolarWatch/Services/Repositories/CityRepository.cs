@@ -24,20 +24,20 @@ public class CityRepository : ICityRepository
 
     public void Update(City city)
     {
-        _context.Update(city);
+        _context.Cities.Update(city);
         _context.SaveChanges();
     }
 
     public int Add(City city)
     {
-        _context.Add(city);
+        _context.Cities.Add(city);
         _context.SaveChanges();
         return city.Id;
     }
 
-    public void Delete(City city)
+    public void Delete(int id)
     {
-        _context.Remove(city);
+        _context.Cities.Remove(_context.Cities.FirstOrDefault(c => c.Id == id));
         _context.SaveChanges();
     }
 }

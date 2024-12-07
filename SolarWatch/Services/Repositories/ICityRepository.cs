@@ -6,5 +6,5 @@ public interface ICityRepository
     City? GetByName(string name);
     void Update(City city);
     int Add(City city);
-    void Delete(City city);
+    void Delete(int id);
 }

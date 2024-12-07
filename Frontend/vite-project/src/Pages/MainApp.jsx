@@ -49,7 +49,7 @@ export default function MainApp() {
 
     return (
         <>
-            {isAdmin && <button className="admin-button"> ADMIN INTERFACE </button>}
+            {isAdmin && <button className="admin-button" onClick={() => navigate("/admin")}> ADMIN INTERFACE </button>}
             {errorMessage ? (<h1 className="error-message"> {errorMessage} </h1>) : (
 
                 <div className="main-app-div">

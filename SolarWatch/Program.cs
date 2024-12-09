@@ -28,9 +28,13 @@ ConfigureSwagger();
 AddDbContexts();
 AddAuthentication();
 AddIdentity();
+AddCors();
 
 // Middlewares
 var app = builder.Build();
+
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -40,6 +44,12 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseCors("AllowFrontend");
+
+using var scope = app.Services.CreateScope(); 
+var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
+authenticationSeeder.AddRoles();
+authenticationSeeder.AddAdmin();
 app.Run();
 
 
@@ -59,6 +69,7 @@ void AddServices()
     builder.Services.AddScoped<IAuthService, AuthService>();
     builder.Services.AddSingleton(new JwtSettings { SecretKey = jwtSecretKey });
     builder.Services.AddScoped<ITokenService, TokenService>();
+    builder.Services.AddScoped<AuthenticationSeeder>();
 
 }
 
@@ -153,5 +164,19 @@ void AddIdentity()
             options.Password.RequireUppercase = false;
             options.Password.RequireLowercase = false;
         })
+        .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<UsersContext>();
+}
+
+void AddCors()
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowFrontend",
+            builder => builder
+                .WithOrigins("http://localhost:4000")
+                .AllowAnyHeader()
+                .AllowAnyMethod());
+    });
+
 }

@@ -31,7 +31,7 @@ public class SolarWatchController : ControllerBase
         _solarRepository = solarRepository;
     }
 
-    [HttpGet(Name = "GetSolarWatchRoute"), Authorize]
+    [HttpGet(Name = "GetSolarWatchRoute"), Authorize(Roles = "User, Admin")]
     public async Task<ActionResult<City>> GetSolarInfos(string cityName, DateOnly date)
     {
         try

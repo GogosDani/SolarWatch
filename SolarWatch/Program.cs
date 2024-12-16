@@ -9,14 +9,17 @@ using SolarWatch.Services;
 using SolarWatch.Services.Authentication;
 using SolarWatch.Services.JsonParsers;
 using SolarWatch.Services.Repositories;
+using dotenv.net;
 
 
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Variables from usersecrets or appsettings
-var connectionString = builder.Configuration.GetConnectionString("Default");
+DotEnv.Load();
+builder.Configuration.AddEnvironmentVariables();
+// Variables from env or appsettings
+var connectionString = builder.Configuration["ConnectionString"];
 var issuer = builder.Configuration["ValidIssuer"];
 var audience = builder.Configuration["ValidAudience"];
 var jwtSecretKey = builder.Configuration["JwtSettings:SecretKey"];

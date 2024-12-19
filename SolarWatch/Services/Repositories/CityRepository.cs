@@ -23,10 +23,11 @@ public class CityRepository : ICityRepository
         return await _context.Cities.FirstOrDefaultAsync(c => c.Name == name);
     }
 
-    public async void Update(City city)
+    public async Task<int> Update(City city)
     {
         _context.Cities.Update(city);
        await _context.SaveChangesAsync();
+       return city.Id;
     }
 
     public async Task<int> Add(City city)
@@ -36,9 +37,10 @@ public class CityRepository : ICityRepository
         return city.Id;
     }
 
-    public async void Delete(int id)
+    public async Task<int> Delete(int id)
     {
         _context.Cities.Remove(_context.Cities.FirstOrDefault(c => c.Id == id));
         await _context.SaveChangesAsync();
+        return id;
     }
 }

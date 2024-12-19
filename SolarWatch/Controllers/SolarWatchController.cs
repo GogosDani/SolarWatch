@@ -81,8 +81,8 @@ public class SolarWatchController : ControllerBase
     {
         try
         {
-            _cityRepository.Add(city);
-            return Ok();
+            var id = await _cityRepository.Add(city);
+            return Ok(id);
         }
         catch (Exception ex)
         {
@@ -95,8 +95,8 @@ public class SolarWatchController : ControllerBase
     {
         try
         {
-            _solarRepository.Add(solar);
-            return Ok();
+            var id = await _solarRepository.Add(solar);
+            return Ok(id);
         }
         catch (Exception ex)
         {
@@ -109,8 +109,8 @@ public class SolarWatchController : ControllerBase
     {
         try
         {
-            _solarRepository.Delete(id);
-            return Ok();
+            var deletedId = await _solarRepository.Delete(id);
+            return Ok(deletedId);
         }
         catch (Exception ex)
         {
@@ -123,8 +123,8 @@ public class SolarWatchController : ControllerBase
     {
         try
         {
-            _cityRepository.Delete(id);
-            return Ok();
+           var deletedId = await _cityRepository.Delete(id);
+            return Ok(deletedId);
         }
         catch (Exception ex)
         {
@@ -137,8 +137,8 @@ public class SolarWatchController : ControllerBase
     {
         try
         {
-            _solarRepository.Update(solar);
-            return Ok();
+            var id = await _solarRepository.Update(solar);
+            return Ok(id);
         }
         catch (Exception ex)
         {
@@ -151,8 +151,8 @@ public class SolarWatchController : ControllerBase
     {
         try
         {
-            _cityRepository.Update(city);
-            return Ok();
+           var id = await _cityRepository.Update(city);
+            return Ok(id);
         }
         catch (Exception ex)
         {

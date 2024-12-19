@@ -13,26 +13,29 @@ public class SolarRepository : ISolarRepository
     }
     
     
-    public Task<Solar?> Get(DateOnly date, int cityId)
+    public async Task<Solar?> Get(DateOnly date, int cityId)
     {
-        return _context.Solars.FirstOrDefaultAsync(x => x.City.Id == cityId && x.Date == date);
+        return await _context.Solars.FirstOrDefaultAsync(x => x.City.Id == cityId && x.Date == date);
     }
 
-    public async void Update(Solar solar)
+    public async Task<int> Update(Solar solar)
     {
         _context.Solars.Update(solar);
-        _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
+        return solar.Id;
     }
 
-    public async void Add(Solar solar)
+    public async Task<int> Add(Solar solar)
     {
         _context.Solars.Add(solar);
-        _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
+        return solar.Id;
     }
 
-    public async void Delete(int id)
+    public async Task<int> Delete(int id)
     {
-        _context.Solars.Remove(_context.Solars.FirstOrDefault(s => s.Id == id));
-        _context.SaveChangesAsync();
+        _context.Solars.Remove(await _context.Solars.FirstOrDefaultAsync(s => s.Id == id));
+        await _context.SaveChangesAsync();
+        return id;
     }
 }

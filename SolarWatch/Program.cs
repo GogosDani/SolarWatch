@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -9,17 +10,22 @@ using SolarWatch.Services;
 using SolarWatch.Services.Authentication;
 using SolarWatch.Services.JsonParsers;
 using SolarWatch.Services.Repositories;
-
+using dotenv.net;
 
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+DotEnv.Load();
+builder.Configuration.AddEnvironmentVariables();
+
+
 // Variables from usersecrets or appsettings
-var connectionString = builder.Configuration.GetConnectionString("Default");
+var connectionString = builder.Configuration["ConnectionString"];
 var issuer = builder.Configuration["ValidIssuer"];
 var audience = builder.Configuration["ValidAudience"];
-var jwtSecretKey = builder.Configuration["JwtSettings:SecretKey"];
+var jwtSecretKey = builder.Configuration["JwtSecretKey"];
+
 
 // Call builder functions
 AddServices();
@@ -133,6 +139,19 @@ void AddAuthentication()
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(jwtSecretKey)
                 ),
+            };
+            options.Events = new JwtBearerEvents
+            {
+                OnTokenValidated = context =>
+                {
+                    var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+                    var roleClaim = claimsIdentity.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name");
+                    if (roleClaim != null)
+                    {
+                        claimsIdentity.AddClaim(new Claim(ClaimsIdentity.DefaultRoleClaimType, roleClaim.Value));
+                    }
+                    return Task.CompletedTask;
+                }
             };
         });
 }

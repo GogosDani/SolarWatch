@@ -36,14 +36,14 @@ public class SolarWatchController : ControllerBase
     {
         try
         {
-            var city = _cityRepository.GetByName(cityName);
+            var city = await _cityRepository.GetByName(cityName);
             Solar solarData = null;
             // city can be null now, if there isn't any data for that city in the DB
             if (city == null)
             {
                 // Get the city data from the API
                 var cityJson = await _cityDataProvider.GetCityData(cityName);
-                city = _cityParser.Process(cityJson);
+                city =  _cityParser.Process(cityJson);
                 var cityId = _cityRepository.Add(city);
                 // If we added the city to the DB just now, we should get the solar data from te API too.
                 solarData = await GetSolarDataFromApi(city, date);
@@ -52,7 +52,7 @@ public class SolarWatchController : ControllerBase
             else
             {
                 // Try to get the solar data from the DB too.
-                solarData = _solarRepository.Get(date, city.Id);
+                solarData = await _solarRepository.Get(date, city.Id);
                 if (solarData == null)
                 {
                     solarData = await GetSolarDataFromApi(city, date);
@@ -76,13 +76,13 @@ public class SolarWatchController : ControllerBase
         
     }
 
-    [HttpPost("City"), Authorize(Roles = "Admin")]
+    [HttpPost("City"), Authorize(Roles = "admin")]
     public async Task<ActionResult> Post([FromBody] City city)
     {
         try
         {
-            _cityRepository.Add(city);
-            return Ok();
+            var id = await _cityRepository.Add(city);
+            return Ok(id);
         }
         catch (Exception ex)
         {
@@ -90,13 +90,27 @@ public class SolarWatchController : ControllerBase
         }
     }
 
-    [HttpPost("SolarInfo"), Authorize(Roles = "Admin")]
+    [HttpPost("SolarInfo"), Authorize(Roles = "admin")]
     public async Task<ActionResult> Post([FromBody] Solar solar)
     {
         try
         {
-            _solarRepository.Add(solar);
-            return Ok();
+            var id = await _solarRepository.Add(solar);
+            return Ok(id);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("SolarInfo"), Authorize(Roles = "admin")]
+    public async Task<ActionResult> DeleteSolar(int id)
+    {
+        try
+        {
+            var deletedId = await _solarRepository.Delete(id);
+            return Ok(deletedId);
         }
         catch (Exception ex)
         {
@@ -104,6 +118,48 @@ public class SolarWatchController : ControllerBase
         }
     }
     
+    [HttpDelete("City"), Authorize(Roles = "admin")]
+    public async Task<ActionResult> DeleteCity(int id)
+    {
+        try
+        {
+           var deletedId = await _cityRepository.Delete(id);
+            return Ok(deletedId);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("SolarInfo"), Authorize(Roles = "admin")]
+    public async Task<ActionResult> EditSolar([FromBody] Solar solar)
+    {
+        try
+        {
+            var id = await _solarRepository.Update(solar);
+            return Ok(id);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("City"), Authorize(Roles = "admin")]
+    public async Task<ActionResult> EditCity([FromBody] City city)
+    {
+        try
+        {
+           var id = await _cityRepository.Update(city);
+            return Ok(id);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        
+    }
     
     private async Task<Solar> GetSolarDataFromApi(City city, DateOnly date)
     {

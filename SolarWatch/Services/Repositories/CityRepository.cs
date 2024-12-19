@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SolarWatch.Data;
 
 namespace SolarWatch.Services.Repositories;
@@ -12,32 +13,32 @@ public class CityRepository : ICityRepository
     }
     
     
-    public IEnumerable<City> GetAll()
+    public async Task<IEnumerable<City>> GetAll()
     {
-        return _context.Cities.ToList();
+        return await _context.Cities.ToListAsync();
     }
 
-    public City? GetByName(string name)
+    public async Task<City?> GetByName(string name)
     {
-        return _context.Cities.FirstOrDefault(c => c.Name == name);
+        return await _context.Cities.FirstOrDefaultAsync(c => c.Name == name);
     }
 
-    public void Update(City city)
+    public async void Update(City city)
     {
         _context.Cities.Update(city);
-        _context.SaveChanges();
+       await _context.SaveChangesAsync();
     }
 
-    public int Add(City city)
+    public async Task<int> Add(City city)
     {
-        _context.Cities.Add(city);
-        _context.SaveChanges();
+        await _context.Cities.AddAsync(city);
+        await _context.SaveChangesAsync();
         return city.Id;
     }
 
-    public void Delete(int id)
+    public async void Delete(int id)
     {
         _context.Cities.Remove(_context.Cities.FirstOrDefault(c => c.Id == id));
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 }

@@ -36,14 +36,14 @@ public class SolarWatchController : ControllerBase
     {
         try
         {
-            var city = _cityRepository.GetByName(cityName);
+            var city = await _cityRepository.GetByName(cityName);
             Solar solarData = null;
             // city can be null now, if there isn't any data for that city in the DB
             if (city == null)
             {
                 // Get the city data from the API
                 var cityJson = await _cityDataProvider.GetCityData(cityName);
-                city = _cityParser.Process(cityJson);
+                city =  _cityParser.Process(cityJson);
                 var cityId = _cityRepository.Add(city);
                 // If we added the city to the DB just now, we should get the solar data from te API too.
                 solarData = await GetSolarDataFromApi(city, date);
@@ -52,7 +52,7 @@ public class SolarWatchController : ControllerBase
             else
             {
                 // Try to get the solar data from the DB too.
-                solarData = _solarRepository.Get(date, city.Id);
+                solarData = await _solarRepository.Get(date, city.Id);
                 if (solarData == null)
                 {
                     solarData = await GetSolarDataFromApi(city, date);
@@ -131,7 +131,35 @@ public class SolarWatchController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-    
+
+    [HttpPut("SolarInfo"), Authorize(Roles = "admin")]
+    public async Task<ActionResult> EditSolar([FromBody] Solar solar)
+    {
+        try
+        {
+            _solarRepository.Update(solar);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("City"), Authorize(Roles = "admin")]
+    public async Task<ActionResult> EditCity([FromBody] City city)
+    {
+        try
+        {
+            _cityRepository.Update(city);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        
+    }
     
     private async Task<Solar> GetSolarDataFromApi(City city, DateOnly date)
     {

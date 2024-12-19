@@ -20,7 +20,8 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Default");
 var issuer = builder.Configuration["ValidIssuer"];
 var audience = builder.Configuration["ValidAudience"];
-var jwtSecretKey = builder.Configuration["JwtSettings:SecretKey"];
+var jwtSecretKey = builder.Configuration["JwtSecretKey"];
+
 
 // Call builder functions
 AddServices();

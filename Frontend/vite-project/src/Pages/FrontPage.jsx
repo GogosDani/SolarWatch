@@ -9,7 +9,7 @@ export default function Page() {
 
     async function handleLogin(userData, e) {
         e.preventDefault();
-        const response = await fetch("https://localhost:44325/Auth/login", {
+        const response = await fetch("http://backend-1:8080/Auth/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

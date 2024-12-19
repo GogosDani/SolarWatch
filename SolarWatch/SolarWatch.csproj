@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>870dc422-3b66-4519-a757-8b8039a05bd6</UserSecretsId>
@@ -17,6 +18,9 @@
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    </ItemGroup>
+    <ItemGroup>
+        <InternalsVisibleTo Include="IntegrationTest" />
     </ItemGroup>
 
 </Project>

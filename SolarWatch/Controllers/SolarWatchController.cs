@@ -12,7 +12,6 @@ namespace SolarWatch.Controllers;
 public class SolarWatchController : ControllerBase
 {
 
-    private readonly ILogger<SolarWatchController> _logger;
     private readonly ICityDataProvider _cityDataProvider;
     private readonly ICityParser _cityParser;
     private readonly ISolarInfoProvider _solarInfoProvider;
@@ -20,9 +19,8 @@ public class SolarWatchController : ControllerBase
     private readonly ICityRepository _cityRepository;
     private readonly ISolarRepository _solarRepository;
 
-    public SolarWatchController(ILogger<SolarWatchController> logger, ICityDataProvider cityDataProvider, ICityParser cityParser , ISolarInfoProvider solarInfoProvider, ISolarParser solarParser, ISolarRepository solarRepository, ICityRepository cityRepository)
+    public SolarWatchController(ICityDataProvider cityDataProvider, ICityParser cityParser , ISolarInfoProvider solarInfoProvider, ISolarParser solarParser, ISolarRepository solarRepository, ICityRepository cityRepository)
     {
-        _logger = logger;
         _cityDataProvider = cityDataProvider;
         _cityParser = cityParser;
         _solarInfoProvider = solarInfoProvider;
@@ -76,90 +74,11 @@ public class SolarWatchController : ControllerBase
         
     }
 
-    [HttpPost("City"), Authorize(Roles = "admin")]
-    public async Task<ActionResult> Post([FromBody] City city)
-    {
-        try
-        {
-            var id = await _cityRepository.Add(city);
-            return Ok(id);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpPost("SolarInfo"), Authorize(Roles = "admin")]
-    public async Task<ActionResult> Post([FromBody] Solar solar)
-    {
-        try
-        {
-            var id = await _solarRepository.Add(solar);
-            return Ok(id);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpDelete("SolarInfo"), Authorize(Roles = "admin")]
-    public async Task<ActionResult> DeleteSolar(int id)
-    {
-        try
-        {
-            var deletedId = await _solarRepository.Delete(id);
-            return Ok(deletedId);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
     
-    [HttpDelete("City"), Authorize(Roles = "admin")]
-    public async Task<ActionResult> DeleteCity(int id)
-    {
-        try
-        {
-           var deletedId = await _cityRepository.Delete(id);
-            return Ok(deletedId);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
 
-    [HttpPut("SolarInfo"), Authorize(Roles = "admin")]
-    public async Task<ActionResult> EditSolar([FromBody] Solar solar)
-    {
-        try
-        {
-            var id = await _solarRepository.Update(solar);
-            return Ok(id);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
+    
 
-    [HttpPut("City"), Authorize(Roles = "admin")]
-    public async Task<ActionResult> EditCity([FromBody] City city)
-    {
-        try
-        {
-           var id = await _cityRepository.Update(city);
-            return Ok(id);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        
-    }
+   
     
     private async Task<Solar> GetSolarDataFromApi(City city, DateOnly date)
     {

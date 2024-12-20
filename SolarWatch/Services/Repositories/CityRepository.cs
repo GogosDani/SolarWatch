@@ -50,4 +50,9 @@ public class CityRepository : ICityRepository
             .Take(8)
             .ToListAsync();
     }
+
+    public async Task<City> GetById(int id)
+    {
+        return await _context.Cities.FirstOrDefaultAsync(c => c.Id == id);
+    }
 }

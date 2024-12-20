@@ -8,4 +8,5 @@ public interface ICityRepository
     Task<int> Add(City city);
     Task<int> Delete(int id);
     Task<IEnumerable<City>> GetByPage(int pageNumber);
+    Task<City> GetById(int id);
 }

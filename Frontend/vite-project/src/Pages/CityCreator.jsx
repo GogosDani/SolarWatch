@@ -37,8 +37,11 @@ export default function CityCreator() {
     return (
         <>
             {errorMessage ? (<h1 className="error-message"> {errorMessage} </h1>) : (
+                <>
+                    <button onClick={(e) => navigate("/admin")} className="back-button"> BACK </button>
+                    <CityForm apiMethod={postCity} />
+                </>
 
-                <CityForm apiMethod={postCity} />
             )}
 
         </>

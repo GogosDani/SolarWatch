@@ -346,3 +346,19 @@ body {
     color: red;
     font-size: 2rem;
 }
+
+.back-button {
+    cursor: pointer;
+    background: linear-gradient(90deg,
+            rgba(110, 239, 255, 0.5) -12.74%,
+            rgba(106, 224, 255, 0.271) 56.76%);
+    border: 2px solid #acf7ff;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    position: relative;
+    left: 0.5rem;
+    top: 0.5rem;
+    width: 7rem;
+    height: 3rem;
+}

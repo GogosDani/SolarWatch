@@ -16,6 +16,20 @@ public class SolarController : ControllerBase
         _solarRepository = repository;
     }
     
+    [HttpGet("/api/solar/getbyid/{id}"), Authorize(Roles = "admin")]
+    public async Task<ActionResult> GetSolarById(int id)
+    {
+        try
+        {
+            Solar solar = await _solarRepository.GetById(id);
+            return Ok(solar);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    
     [HttpPost(), Authorize(Roles = "admin")]
     public async Task<ActionResult> Post([FromBody] Solar solar)
     {
@@ -71,4 +85,6 @@ public class SolarController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+    
+    
 }

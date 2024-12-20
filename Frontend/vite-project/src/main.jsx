@@ -33,11 +33,11 @@ const router = createBrowserRouter([
     element: <SolarCreator />
   },
   {
-    path: "/edit/solar",
+    path: "/edit/solar/:id",
     element: <SolarEditor />
   },
   {
-    path: "/edit/city",
+    path: "/edit/city/:id",
     element: <CityEditor />
   }
 ])

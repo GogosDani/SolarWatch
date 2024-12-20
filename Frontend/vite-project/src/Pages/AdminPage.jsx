@@ -11,6 +11,7 @@ export default function AdminPage() {
     const [cityPage, setCityPage] = useState(1);
     const [solarPage, setSolarPage] = useState(1);
     const [errorMessage, setErrorMessage] = useState("");
+    const navigate = useNavigate();
 
 
     // Check if the logged user have admin role
@@ -80,7 +81,7 @@ export default function AdminPage() {
                                     <td> {solar.sunset} </td>
                                     <td> {solar.sunrise} </td>
                                     <td> {solar.cityId} </td>
-                                    <td ><button className="edit-button"> EDIT </button></td>
+                                    <td ><button className="edit-button" onClick={() => navigate(`/edit/solar/${solar.id}`)}> EDIT </button></td>
                                     <td><button className="delete-button" onClick={(e) => deleteSolar(solar.id)} > DELETE </button></td>
                                 </tr>
                                 )}
@@ -109,7 +110,7 @@ export default function AdminPage() {
                                     <td> {city.name} </td>
                                     <td> {city.longitude} </td>
                                     <td> {city.latitude} </td>
-                                    <td ><button className="edit-button"> EDIT </button></td>
+                                    <td ><button className="edit-button" onClick={() => navigate(`/edit/city/${city.id}`)}> EDIT </button></td>
                                     <td><button className="delete-button" onClick={(e) => deleteCity(city.id)}> DELETE </button></td>
                                 </tr>)}
                                 <tr className="nav-buttons-div">

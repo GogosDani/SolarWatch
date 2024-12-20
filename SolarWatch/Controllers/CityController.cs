@@ -14,6 +14,20 @@ public class CityController : ControllerBase
     {
         _cityRepository = cityRepository;
     }
+
+    [HttpGet("/api/city/getbyid/{id}"), Authorize(Roles = "admin")]
+    public async Task<ActionResult> GetCityById(int id)
+    {
+        try
+        {
+            City city = await _cityRepository.GetById(id);
+            return Ok(city);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
     
     [HttpPost(), Authorize(Roles = "admin")]
     public async Task<ActionResult> Post([FromBody] City city)

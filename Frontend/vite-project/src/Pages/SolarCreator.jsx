@@ -39,7 +39,10 @@ export default function SolarCreator() {
     return (
         <>
             {errorMessage ? (<h1 className="error-message"> {errorMessage} </h1>) : (
-                <SolarForm apiMethod={postSolar} />
+                <>
+                    <button onClick={(e) => navigate("/admin")} className="back-button"> BACK </button>
+                    <SolarForm apiMethod={postSolar} />
+                </>
             )}
         </>
     )

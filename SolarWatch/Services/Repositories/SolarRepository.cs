@@ -46,4 +46,9 @@ public class SolarRepository : ISolarRepository
             .Take(8)
             .ToListAsync();
     }
+
+    public async Task<Solar> GetById(int id)
+    {
+        return await _context.Solars.FirstOrDefaultAsync(s => s.Id == id);
+    }
 }

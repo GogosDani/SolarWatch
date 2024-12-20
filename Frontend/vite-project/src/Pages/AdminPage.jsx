@@ -125,13 +125,6 @@ export default function AdminPage() {
     )
 }
 
-async function editCity() {
-
-}
-
-async function editSolar() {
-
-}
 
 
 

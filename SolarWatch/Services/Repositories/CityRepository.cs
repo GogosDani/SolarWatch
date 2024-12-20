@@ -12,7 +12,6 @@ public class CityRepository : ICityRepository
         _context = context;
     }
     
-    
     public async Task<IEnumerable<City>> GetAll()
     {
         return await _context.Cities.ToListAsync();
@@ -42,5 +41,13 @@ public class CityRepository : ICityRepository
         _context.Cities.Remove(_context.Cities.FirstOrDefault(c => c.Id == id));
         await _context.SaveChangesAsync();
         return id;
+    }
+
+    public async Task<IEnumerable<City>> GetByPage(int pageNumber)
+    {
+        return await _context.Cities.OrderBy(c => c.Id)
+            .Skip((pageNumber - 1) * 10)
+            .Take(10)
+            .ToListAsync();
     }
 }

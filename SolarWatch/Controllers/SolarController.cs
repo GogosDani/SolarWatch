@@ -4,6 +4,8 @@ using SolarWatch.Services.Repositories;
 
 namespace SolarWatch.Controllers;
 
+[Route("api/solar")]
+[ApiController]
 public class SolarController : ControllerBase
 {
     
@@ -49,6 +51,20 @@ public class SolarController : ControllerBase
         {
             var id = await _solarRepository.Update(solar);
             return Ok(id);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("{pageNumber}"), Authorize(Roles = "admin")]
+    public async Task<ActionResult> GetByPage(int pageNumber)
+    {
+        try
+        {
+            var solars = await _solarRepository.GetByPage(pageNumber);
+            return Ok(solars);
         }
         catch (Exception ex)
         {

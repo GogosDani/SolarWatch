@@ -38,4 +38,12 @@ public class SolarRepository : ISolarRepository
         await _context.SaveChangesAsync();
         return id;
     }
+
+    public async Task<IEnumerable<Solar>> GetByPage(int pageNumber)
+    {
+        return await _context.Solars.OrderBy(s => s.Id)
+            .Skip((pageNumber - 1) * 10)
+            .Take(10)
+            .ToListAsync();
+    }
 }

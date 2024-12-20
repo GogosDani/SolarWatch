@@ -4,6 +4,8 @@ using SolarWatch.Services.Repositories;
 
 namespace SolarWatch.Controllers;
 
+[Route("api/city")]
+[ApiController]
 public class CityController : ControllerBase
 {
     private readonly ICityRepository _cityRepository;
@@ -54,5 +56,20 @@ public class CityController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpGet("{pageNumber}"), Authorize(Roles = "admin")] 
+    public async Task<ActionResult> GetByPage(int pageNumber)
+    {
+        try
+        {
+            var cities = await _cityRepository.GetByPage(pageNumber);
+            return Ok(cities);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    
     
 }

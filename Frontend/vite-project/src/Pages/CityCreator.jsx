@@ -21,7 +21,7 @@ export default function CityCreator() {
 
     async function postCity(newData, e) {
         e.preventDefault();
-        const response = await api.post("/SolarWatch/City",
+        const response = await api.post("/api/city",
             JSON.stringify(newData),
             {
                 headers: {
@@ -37,8 +37,11 @@ export default function CityCreator() {
     return (
         <>
             {errorMessage ? (<h1 className="error-message"> {errorMessage} </h1>) : (
+                <>
+                    <button onClick={(e) => navigate("/admin")} className="back-button"> BACK </button>
+                    <CityForm apiMethod={postCity} />
+                </>
 
-                <CityForm apiMethod={postCity} />
             )}
 
         </>

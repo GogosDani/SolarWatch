@@ -37,26 +37,17 @@ body {
 }
 
 .auth-buttons {
-    align-items: center;
     background-image: linear-gradient(144deg, #AF40FF, #5B42F3 50%, #00DDEB);
     border: 0;
     border-radius: 8px;
     box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
     box-sizing: border-box;
     color: #FFFFFF;
-    display: flex;
     font-family: Phantomsans, sans-serif;
     font-size: 1.5rem;
     justify-content: center;
-    line-height: 1em;
-    width: 3rem;
     width: 10rem;
     padding: 19px 24px;
-    text-decoration: none;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    white-space: nowrap;
     cursor: pointer;
 }
 
@@ -354,4 +345,20 @@ body {
 .format-error-message {
     color: red;
     font-size: 2rem;
+}
+
+.back-button {
+    cursor: pointer;
+    background: linear-gradient(90deg,
+            rgba(110, 239, 255, 0.5) -12.74%,
+            rgba(106, 224, 255, 0.271) 56.76%);
+    border: 2px solid #acf7ff;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    position: relative;
+    left: 0.5rem;
+    top: 0.5rem;
+    width: 7rem;
+    height: 3rem;
 }

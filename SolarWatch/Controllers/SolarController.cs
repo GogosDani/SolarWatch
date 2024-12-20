@@ -16,7 +16,21 @@ public class SolarController : ControllerBase
         _solarRepository = repository;
     }
     
-    [HttpPost("SolarInfo"), Authorize(Roles = "admin")]
+    [HttpGet("/api/solar/getbyid/{id}"), Authorize(Roles = "admin")]
+    public async Task<ActionResult> GetSolarById(int id)
+    {
+        try
+        {
+            Solar solar = await _solarRepository.GetById(id);
+            return Ok(solar);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    
+    [HttpPost(), Authorize(Roles = "admin")]
     public async Task<ActionResult> Post([FromBody] Solar solar)
     {
         try
@@ -30,7 +44,7 @@ public class SolarController : ControllerBase
         }
     }
 
-    [HttpDelete("SolarInfo"), Authorize(Roles = "admin")]
+    [HttpDelete("{id}"), Authorize(Roles = "admin")]
     public async Task<ActionResult> DeleteSolar(int id)
     {
         try
@@ -44,7 +58,7 @@ public class SolarController : ControllerBase
         }
     }
     
-    [HttpPut("SolarInfo"), Authorize(Roles = "admin")]
+    [HttpPut(), Authorize(Roles = "admin")]
     public async Task<ActionResult> EditSolar([FromBody] Solar solar)
     {
         try
@@ -71,4 +85,6 @@ public class SolarController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+    
+    
 }

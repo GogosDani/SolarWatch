@@ -5,7 +5,27 @@ import RegisterComponent from "../Components/RegisterComponent";
 export default function Page() {
     const [login, setLogin] = useState(false);
     const [register, setRegister] = useState(false);
+    const [isSuccessful, setIsSuccessful] = useState(false);
+    const [registrationFailed, setRegistrationFailed] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isSuccessful) {
+            setRegister(false);
+            setTimeout(() => {
+                setIsSuccessful(false);
+            }, 3000);
+        }
+    }, [isSuccessful])
+
+    useEffect(() => {
+        if (registrationFailed) {
+            setTimeout(() => {
+                setRegistrationFailed(false);
+            }, 3000);
+        }
+    }, [registrationFailed])
+
 
     async function handleLogin(userData, e) {
         e.preventDefault();
@@ -26,6 +46,27 @@ export default function Page() {
         }
     }
 
+    async function handleRegister(userData, e) {
+        e.preventDefault();
+        const response = await fetch("https://localhost:44325/Auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: userData.username,
+                password: userData.password,
+                email: userData.email
+            })
+        })
+        if (response.ok) {
+            setIsSuccessful(true);
+        } else {
+            setRegistrationFailed(true);
+        }
+    }
+
+
     return (
         <div className="front-page-div">
             <div className="title-div">
@@ -37,25 +78,19 @@ export default function Page() {
             </div>
             {login ? <LoginComponent handleLogin={handleLogin} setLogin={setLogin} /> : ""}
             {register ? <RegisterComponent handleRegister={handleRegister} setRegister={setRegister} /> : ""}
+            {isSuccessful && (
+                <div className="success-popup">
+                    <p className="success-text">Registration successful!</p>
+                </div>
+            )}
+            {registrationFailed && (
+                <div className="failed-popup">
+                    <p className="failed-text">User already exists!</p>
+                </div>
+            )}
         </div>
 
 
     )
-}
-async function handleRegister(userData, e) {
-    e.preventDefault();
-    const response = await fetch("https://localhost:44325/Auth/register", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            username: userData.username,
-            password: userData.password,
-            email: userData.email
-        })
-    })
-    const data = await response.json();
-    console.log(data);
 }
 

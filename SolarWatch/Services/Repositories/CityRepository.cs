@@ -46,8 +46,8 @@ public class CityRepository : ICityRepository
     public async Task<IEnumerable<City>> GetByPage(int pageNumber)
     {
         return await _context.Cities.OrderBy(c => c.Id)
-            .Skip((pageNumber - 1) * 10)
-            .Take(10)
+            .Skip((pageNumber - 1) * 8)
+            .Take(8)
             .ToListAsync();
     }
 }

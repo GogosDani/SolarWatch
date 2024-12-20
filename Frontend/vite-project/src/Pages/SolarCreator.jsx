@@ -22,7 +22,7 @@ export default function SolarCreator() {
 
     async function postSolar(newData, e) {
         e.preventDefault();
-        const response = await api.post("/SolarWatch/SolarInfo",
+        const response = await api.post("/api/solar",
             JSON.stringify(newData),
             {
                 headers: {

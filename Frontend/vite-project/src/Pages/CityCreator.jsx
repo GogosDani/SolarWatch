@@ -21,7 +21,7 @@ export default function CityCreator() {
 
     async function postCity(newData, e) {
         e.preventDefault();
-        const response = await api.post("/SolarWatch/City",
+        const response = await api.post("/api/city",
             JSON.stringify(newData),
             {
                 headers: {

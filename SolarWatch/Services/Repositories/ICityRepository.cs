@@ -7,4 +7,5 @@ public interface ICityRepository
     Task<int> Update(City city);
     Task<int> Add(City city);
     Task<int> Delete(int id);
+    Task<IEnumerable<City>> GetByPage(int pageNumber);
 }

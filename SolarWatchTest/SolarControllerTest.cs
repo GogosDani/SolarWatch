@@ -28,10 +28,9 @@ public class SolarControllerTest
         _solarInfoReader = new Mock<ISolarInfoProvider>();
         _cityParser = new Mock<ICityParser>();
         _solarParser = new Mock<ISolarParser>();
-        _mockLogger = new Mock<ILogger<SolarWatchController>>();
         _cityRepository = new Mock<ICityRepository>();
         _solarRepository = new Mock<ISolarRepository>();
-        _controller = new SolarWatchController(_mockLogger.Object, _cityApiReader.Object, _cityParser.Object, _solarInfoReader.Object, _solarParser.Object, _solarRepository.Object, _cityRepository.Object);
+        _controller = new SolarWatchController(_cityApiReader.Object, _cityParser.Object, _solarInfoReader.Object, _solarParser.Object, _solarRepository.Object, _cityRepository.Object);
     }
 
     [Test]

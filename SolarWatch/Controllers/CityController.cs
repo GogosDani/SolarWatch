@@ -15,7 +15,7 @@ public class CityController : ControllerBase
         _cityRepository = cityRepository;
     }
     
-    [HttpPost("City"), Authorize(Roles = "admin")]
+    [HttpPost(), Authorize(Roles = "admin")]
     public async Task<ActionResult> Post([FromBody] City city)
     {
         try
@@ -29,7 +29,7 @@ public class CityController : ControllerBase
         }
     }
     
-    [HttpDelete("City"), Authorize(Roles = "admin")]
+    [HttpDelete("{id}"), Authorize(Roles = "admin")]
     public async Task<ActionResult> DeleteCity(int id)
     {
         try
@@ -43,7 +43,7 @@ public class CityController : ControllerBase
         }
     }
     
-    [HttpPut("City"), Authorize(Roles = "admin")]
+    [HttpPut(), Authorize(Roles = "admin")]
     public async Task<ActionResult> EditCity([FromBody] City city)
     {
         try

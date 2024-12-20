@@ -44,6 +44,17 @@ export default function AdminPage() {
         GetSolarDatas();
     }, [solarPage])
 
+    async function deleteCity(id) {
+        const response = await api.delete(`/api/city/${id}`);
+        setCities(prev => prev.filter(c => c.id != id));
+    }
+
+    async function deleteSolar(id) {
+        const response = await api.delete(`/api/solar/${id}`);
+        setSolars(prev => prev.filter(s => s.id != id));
+    }
+
+
     return (
         <>
             {errorMessage ? (<h1 className="error-message"> {errorMessage} </h1>) : (
@@ -63,14 +74,14 @@ export default function AdminPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {solars.map(solar => <tr>
+                                {solars.map(solar => <tr key={solar.id}>
                                     <td> {solar.id} </td>
                                     <td> {solar.date} </td>
                                     <td> {solar.sunset} </td>
                                     <td> {solar.sunrise} </td>
                                     <td> {solar.cityId} </td>
                                     <td ><button className="edit-button"> EDIT </button></td>
-                                    <td><button className="delete-button"> DELETE </button></td>
+                                    <td><button className="delete-button" onClick={(e) => deleteSolar(solar.id)} > DELETE </button></td>
                                 </tr>
                                 )}
                                 <tr className="nav-buttons-div">
@@ -93,13 +104,13 @@ export default function AdminPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {cities.map(city => <tr>
+                                {cities.map(city => <tr key={city.id}>
                                     <td> {city.id} </td>
                                     <td> {city.name} </td>
                                     <td> {city.longitude} </td>
                                     <td> {city.latitude} </td>
                                     <td ><button className="edit-button"> EDIT </button></td>
-                                    <td><button className="delete-button"> DELETE </button></td>
+                                    <td><button className="delete-button" onClick={(e) => deleteCity(city.id)}> DELETE </button></td>
                                 </tr>)}
                                 <tr className="nav-buttons-div">
                                     <td> <button className="nav-buttons" onClick={() => cityPage == 1 ? "" : setCityPage(prev => prev - 1)}> PREV </button> </td>
@@ -109,10 +120,18 @@ export default function AdminPage() {
                         </table>
                     </div >
                 </>
-
             )}
-
-
         </>
     )
 }
+
+async function editCity() {
+
+}
+
+async function editSolar() {
+
+}
+
+
+

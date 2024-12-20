@@ -6,4 +6,5 @@ public interface ISolarRepository
     Task<int> Update(Solar solar);
     Task<int> Add(Solar solar);
     Task<int> Delete(int id);
+    Task<IEnumerable<Solar>> GetByPage(int pageNumber);
 }

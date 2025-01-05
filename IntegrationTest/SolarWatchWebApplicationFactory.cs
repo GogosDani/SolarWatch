@@ -1,8 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using SolarWatch.Data;
 
 namespace IntegrationTest;
@@ -12,10 +7,9 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
-using SolarWatch.Data;
 
 
-internal class SolarWatchWebApplicationFactory : WebApplicationFactory<Program>
+public class SolarWatchWebApplicationFactory : WebApplicationFactory<SolarWatch.Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

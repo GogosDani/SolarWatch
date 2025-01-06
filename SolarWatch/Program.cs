@@ -11,12 +11,7 @@ using SolarWatch.Services.Authentication;
 using SolarWatch.Services.JsonParsers;
 using SolarWatch.Services.Repositories;
 
-namespace SolarWatch;
 
-public class Program
-{
-    public static void Main(string[] args)
-    {
         var builder = WebApplication.CreateBuilder(args);
 
         DotEnv.Load();
@@ -175,5 +170,8 @@ public class Program
             // });
 
         }
-    }
-}
+
+        public partial class Program
+        {
+            
+        }

@@ -1,4 +1,11 @@
+using dotenv.net;
+using Microsoft.Extensions.Configuration;
+using Moq;
+using SolarWatch;
 using SolarWatch.Data;
+using SolarWatch.Services;
+using SolarWatch.Services.Authentication;
+using SolarWatch.Services.JsonParsers;
 
 namespace IntegrationTest;
 
@@ -6,19 +13,20 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 
-public class SolarWatchWebApplicationFactory : WebApplicationFactory<SolarWatch.Program>
+public class SolarWatchWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        
         builder.ConfigureServices(services =>
         {
             // Get the added DB contexts from services
             var solarWatchDbContextDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<SolarApiContext>));
             var usersDbContextDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<UsersContext>));
-            
+            if (usersDbContextDescriptor == null) throw new Exception("----------------usersDB------------");
+            if (solarWatchDbContextDescriptor == null) throw new Exception("---------------------SolarApiContext");
             // Remove these DB contexts (used in real app)
             services.Remove(solarWatchDbContextDescriptor);
             services.Remove(usersDbContextDescriptor);
@@ -28,9 +36,10 @@ public class SolarWatchWebApplicationFactory : WebApplicationFactory<SolarWatch.
             {
                 options.UseInMemoryDatabase("SolarApiTestDb");
             });
+            
             services.AddDbContext<UsersContext>(options =>
             {
-                options.UseInMemoryDatabase("UsersContextTestDb");
+                options.UseInMemoryDatabase("UsersContextDb");
             });
 
             // Initialize in-memory DBs
@@ -41,6 +50,22 @@ public class SolarWatchWebApplicationFactory : WebApplicationFactory<SolarWatch.
             var userContext = scope.ServiceProvider.GetRequiredService<UsersContext>();
             userContext.Database.EnsureDeleted();
             userContext.Database.EnsureCreated();
+            
+            
+            // MOCKS
+            var mockCityDataProvider = new Mock<ICityDataProvider>();
+            mockCityDataProvider.Setup(x => x.GetCityData(It.IsAny<string>()))
+                .ReturnsAsync("{\"cityName\":\"London\",\"latitude\":51.5074,\"longitude\":-0.1278}");
+
+            services.AddSingleton(mockCityDataProvider.Object);
+            
+            var mockSolarInfoProvider = new Mock<ISolarInfoProvider>();
+            mockSolarInfoProvider.Setup(x => x.GetSolarData(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<DateOnly>()))
+                .ReturnsAsync("{\"solarEnergy\":\"1234\",\"sunrise\":\"07:00\",\"sunset\":\"18:00\"}");
+
+            services.AddSingleton(mockSolarInfoProvider.Object);
+
         });
     }
 }
+

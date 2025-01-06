@@ -12,15 +12,20 @@
         <PackageReference Include="dotenv.net" Version="3.2.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     </ItemGroup>
     <ItemGroup>
         <InternalsVisibleTo Include="IntegrationTest" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Update=".env">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

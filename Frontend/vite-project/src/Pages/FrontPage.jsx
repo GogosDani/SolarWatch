@@ -2,6 +2,8 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import LoginComponent from "../Components/LoginComponent";
 import RegisterComponent from "../Components/RegisterComponent";
+import { api } from "../Axios/api"
+
 export default function Page() {
     const [login, setLogin] = useState(false);
     const [register, setRegister] = useState(false);
@@ -29,39 +31,35 @@ export default function Page() {
 
     async function handleLogin(userData, e) {
         e.preventDefault();
-        const response = await fetch("http://localhost:8080/Auth/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
+        try {
+            const response = await api.post("/Auth/login", {
                 password: userData.password,
                 email: userData.email
-            })
-        })
-        if (response.ok) {
-            const data = await response.json();
-            localStorage.setItem('token', data.token);
-            navigate("/app")
+            });
+
+            if (response.status === 200) {
+                const data = response.data;
+                localStorage.setItem('token', data.token);
+                navigate("/app");
+            }
+        } catch (error) {
+            console.error("Login failed:", error);
         }
     }
 
     async function handleRegister(userData, e) {
         e.preventDefault();
-        const response = await fetch("https://localhost:44325/Auth/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
+        try {
+            const response = await api.post("/Auth/register", {
                 username: userData.username,
                 password: userData.password,
                 email: userData.email
-            })
-        })
-        if (response.ok) {
-            setIsSuccessful(true);
-        } else {
+            });
+            if (response.status === 200) {
+                setIsSuccessful(true);
+            }
+        } catch (error) {
+            console.error("Registration failed:", error);
             setRegistrationFailed(true);
         }
     }

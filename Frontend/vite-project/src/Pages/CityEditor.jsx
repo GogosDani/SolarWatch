@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import CityForm from "../Components/CityForm"
-import api from "../Axios/api";
+import { apiWithAuth } from "../Axios/api";
 
 export default function CityEditor() {
     const { id } = useParams();
@@ -11,7 +11,7 @@ export default function CityEditor() {
 
     useEffect(() => {
         async function getCity() {
-            const response = await api.get(`/api/city/getbyid/${id}`);
+            const response = await apiWithAuth.get(`/api/city/getbyid/${id}`);
             const data = await response.data
             setCity(prev => data);
         }
@@ -21,7 +21,7 @@ export default function CityEditor() {
 
     async function editData(newData, e) {
         e.preventDefault();
-        const response = await api.put("/api/city",
+        const response = await apiWithAuth.put("/api/city",
             JSON.stringify(newData),
             {
                 headers: {

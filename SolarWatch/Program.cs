@@ -188,7 +188,6 @@ void AddCors()
 
 void Migration()
 {
-    Console.WriteLine("Conasdsadasssssssssss" + connectionString);
     using (var scope = app.Services.CreateScope())
     {
         var solarDb = scope.ServiceProvider.GetRequiredService<SolarApiContext>();

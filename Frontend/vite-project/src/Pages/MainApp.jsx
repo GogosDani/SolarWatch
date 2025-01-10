@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import api from "../Axios/api"
+import { apiWithAuth } from "../Axios/api";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
@@ -35,7 +35,7 @@ export default function MainApp() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        const response = await api.get("/SolarWatch", {
+        const response = await apiWithAuth.get("/SolarWatch", {
             params: {
                 cityName: city,
                 date: date

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import AdminHeader from "../Components/AdminHeader"
-import api from "../Axios/api";
+import { apiWithAuth } from "../Axios/api";
 import './AdminPage.scss'
 
 export default function AdminPage() {
@@ -29,7 +29,7 @@ export default function AdminPage() {
     // Get city datas by page
     useEffect(() => {
         async function GetCityDatas() {
-            const response = await api.get(`/api/city/${cityPage}`)
+            const response = await apiWithAuth.get(`/api/city/${cityPage}`)
             setCities(prev => response.data);
         }
         GetCityDatas();
@@ -39,19 +39,19 @@ export default function AdminPage() {
     // Get solar datas by page
     useEffect(() => {
         async function GetSolarDatas() {
-            const response = await api.get(`/api/solar/${solarPage}`)
+            const response = await apiWithAuth.get(`/api/solar/${solarPage}`)
             setSolars(prev => response.data);
         }
         GetSolarDatas();
     }, [solarPage])
 
     async function deleteCity(id) {
-        const response = await api.delete(`/api/city/${id}`);
+        const response = await apiWithAuth.delete(`/api/city/${id}`);
         setCities(prev => prev.filter(c => c.id != id));
     }
 
     async function deleteSolar(id) {
-        const response = await api.delete(`/api/solar/${id}`);
+        const response = await apiWithAuth.delete(`/api/solar/${id}`);
         setSolars(prev => prev.filter(s => s.id != id));
     }
 

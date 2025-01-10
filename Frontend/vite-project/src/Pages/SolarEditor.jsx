@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import SolarDataForm from "../Components/SolarDataform"
-import api from "../Axios/api";
+import { apiWithAuth } from "../Axios/api";
 
 export default function SolarEditor() {
     const { id } = useParams();
@@ -11,7 +11,7 @@ export default function SolarEditor() {
 
     useEffect(() => {
         async function getSolar() {
-            const response = await api.get(`/api/solar/getbyid/${id}`);
+            const response = await apiWithAuth.get(`/api/solar/getbyid/${id}`);
             const data = await response.data
             setSolar(prev => data);
         }
@@ -21,7 +21,7 @@ export default function SolarEditor() {
 
     async function editData(newData, e) {
         e.preventDefault();
-        const response = await api.put("/api/solar",
+        const response = await apiWithAuth.put("/api/solar",
             JSON.stringify(newData),
             {
                 headers: {

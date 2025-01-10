@@ -31,17 +31,8 @@ export default function Page() {
 
     async function handleLogin(userData, e) {
         e.preventDefault();
-<<<<<<< HEAD
-        const response = await fetch("http://backend-1:8080/Auth/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-=======
         try {
             const response = await api.post("/Auth/login", {
->>>>>>> main
                 password: userData.password,
                 email: userData.email
             });

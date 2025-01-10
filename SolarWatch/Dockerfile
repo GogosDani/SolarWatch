@@ -1,7 +1,5 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env 
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-<<<<<<< HEAD
-=======
 EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
@@ -20,18 +18,11 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "SolarWatch.dll"]
 
->>>>>>> main
 COPY *.csproj ./
 RUN dotnet restore
 COPY . ./
 RUN dotnet publish -c Release -o out
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-<<<<<<< HEAD
-COPY --from=build-env /app/out .
-ENTRYPOINT ["dotnet", "SolarWatch.dll"]
-=======
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "SolarWatch.dll"]
-
->>>>>>> main

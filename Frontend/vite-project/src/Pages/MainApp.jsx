@@ -27,7 +27,6 @@ export default function MainApp() {
         const token = localStorage.getItem("token");
         if (token) {
             const decodedToken = jwtDecode(token);
-            console.log(decodedToken);
             if (decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
                 == "Admin") {
                 setIsAdmin(true);
@@ -84,13 +83,7 @@ export default function MainApp() {
                         }
                     </div>
                 </div>
-
-
-
             )}
-
         </>
-
-
     )
 }

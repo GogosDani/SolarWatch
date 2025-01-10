@@ -25,8 +25,8 @@ public class SolarWatchWebApplicationFactory : WebApplicationFactory<Program>
             // Get the added DB contexts from services
             var solarWatchDbContextDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<SolarApiContext>));
             var usersDbContextDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<UsersContext>));
-            if (usersDbContextDescriptor == null) throw new Exception("----------------usersDB------------");
-            if (solarWatchDbContextDescriptor == null) throw new Exception("---------------------SolarApiContext");
+            if (usersDbContextDescriptor == null) throw new Exception("Couldn't find registered UserDB");
+            if (solarWatchDbContextDescriptor == null) throw new Exception("Couldn't find registered SolarDB");
             // Remove these DB contexts (used in real app)
             services.Remove(solarWatchDbContextDescriptor);
             services.Remove(usersDbContextDescriptor);
@@ -53,17 +53,17 @@ public class SolarWatchWebApplicationFactory : WebApplicationFactory<Program>
             
             
             // MOCKS
-            var mockCityDataProvider = new Mock<ICityDataProvider>();
-            mockCityDataProvider.Setup(x => x.GetCityData(It.IsAny<string>()))
-                .ReturnsAsync("{\"cityName\":\"London\",\"latitude\":51.5074,\"longitude\":-0.1278}");
-
-            services.AddSingleton(mockCityDataProvider.Object);
-            
-            var mockSolarInfoProvider = new Mock<ISolarInfoProvider>();
-            mockSolarInfoProvider.Setup(x => x.GetSolarData(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<DateOnly>()))
-                .ReturnsAsync("{\"solarEnergy\":\"1234\",\"sunrise\":\"07:00\",\"sunset\":\"18:00\"}");
-
-            services.AddSingleton(mockSolarInfoProvider.Object);
+            // var mockCityDataProvider = new Mock<ICityDataProvider>();
+            // mockCityDataProvider.Setup(x => x.GetCityData(It.IsAny<string>()))
+            //     .ReturnsAsync("{\"cityName\":\"London\",\"latitude\":51.5074,\"longitude\":-0.1278}");
+            //
+            // services.AddSingleton(mockCityDataProvider.Object);
+            //
+            // var mockSolarInfoProvider = new Mock<ISolarInfoProvider>();
+            // mockSolarInfoProvider.Setup(x => x.GetSolarData(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<DateOnly>()))
+            //     .ReturnsAsync("{\"solarEnergy\":\"1234\",\"sunrise\":\"07:00\",\"sunset\":\"18:00\"}");
+            //
+            // services.AddSingleton(mockSolarInfoProvider.Object);
 
         });
     }

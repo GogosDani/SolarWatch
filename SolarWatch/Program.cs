@@ -22,6 +22,8 @@ using SolarWatch.Services.Repositories;
         var issuer = builder.Configuration["ValidIssuer"];
         var audience = builder.Configuration["ValidAudience"];
         var jwtSecretKey = builder.Configuration["JwtSecretKey"];
+        Console.WriteLine(issuer);
+        Console.WriteLine(audience);
 
 // Call builder functions
         AddServices();
@@ -160,15 +162,14 @@ using SolarWatch.Services.Repositories;
 
         void AddCors()
         {
-            // builder.Services.AddCors(options =>
-            // {
-            //     options.AddPolicy("AllowFrontend",
-            //         builder => builder
-            //             .WithOrigins("http://localhost:4000")
-            //             .AllowAnyHeader()
-            //             .AllowAnyMethod());
-            // });
-
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend",
+                    builder => builder
+                        .WithOrigins("http://localhost:4000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
         }
 
         public partial class Program

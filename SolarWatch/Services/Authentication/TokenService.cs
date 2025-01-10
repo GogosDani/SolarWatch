@@ -10,7 +10,7 @@ namespace SolarWatch.Services.Authentication;
 
 public class TokenService : ITokenService
 {
-    private const int ExpirationMinutes = 30;
+    private const int ExpirationMinutes = 3000000;
     private readonly string _jwtSecretKey;
 
     public TokenService(JwtSettings jwtSettings)

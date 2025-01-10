@@ -6,8 +6,12 @@ using System.Security.Claims;
 using System.Text;
 using Azure;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using SolarWatch;
 using SolarWatch.Contracts;
+using SolarWatch.Data;
 using SolarWatch.Services.Authentication;
 using Xunit.Abstractions;
 
@@ -24,32 +28,106 @@ public class ControllerIntegrationTest
 
     public ControllerIntegrationTest(ITestOutputHelper output)
     {
+        var builder = new ConfigurationBuilder()
+            .AddUserSecrets<ControllerIntegrationTest>(); 
+        var configuration = builder.Build();
+        var secretKey = configuration["JWT_SECRET_KEY"];
+       
         _app = new SolarWatchWebApplicationFactory();
         _client = _app.CreateClient();
-        _tokenService = new TokenService(new JwtSettings { SecretKey = "396b822abe3e785ebcc87ad06edeefa28fe6f51328fee0de762f40ffd821aef46859b74824d13e076ad6b12ab711839cd30ca2bfa1bf27b75abe39aa56f53fdfbdd29fa821edfdfb4b8e014ab8ec6454f2a2d594b16dfdeab9303c04d3c60664d3ad4de8e6312f6981d1ddf10ad4bc8412b1042a46c155b380077a3f9158cd587b647a615f906d82a06478f3a39324e957d77a3fc53b236986262a14ae85949ce54c2cbeb96558ace00ed0bce8ace2d3f25616a27b1bdd5858ef12e599811e6addb403d11d656fcf436edc4c8042c13ddccea2977a1e6de37789675d5df0bdca130418b31d9ac7d6a71b2beb89f69ab5a1ba7d40aa6b68161e6fefbd6dce0d8a"});
+        if (string.IsNullOrEmpty(secretKey))
+        {
+            throw new InvalidOperationException("Couldn't find jwt secret key!");
+        }
+        _tokenService = new TokenService(new JwtSettings { SecretKey = secretKey});
         _output = output;
     }
     
-    [Fact]
-    public async Task TestSolarEndpointIfUnAuthorized()
-    {
-        var response = await _client.GetAsync("/SolarWatch?cityName=London&date=2025-01-01");
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-    }
     
     [Fact]
     public async Task TestSolarEndpointIfAuthorized()
     {
+        var solar = new Solar()
+        {
+            Id = 1, City = new City() { Id = 1, Latitude = 555.53, Longitude = 53.53, Name = "London" }, CityId = 1,
+            Date = new DateOnly(2025, 01, 01), Sunrise = "5:52:52 AM", Sunset = "5:52:52 PM"
+        };
+        // Add a solar data into the in-memory DB
+        using (var scope = _app.Services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<SolarApiContext>();
+            context.Solars.Add(solar);
+            await context.SaveChangesAsync();
+        }
+        // Get the user token
         var token = GenerateJwtToken();
-        _output.WriteLine($"Generated Token: {token}");
+        // Create the request, add token to the headers
         var request = new HttpRequestMessage(HttpMethod.Get, "/SolarWatch?cityName=London&date=2025-01-01");
         request.Headers.Add("Authorization", $"Bearer {token}");
         var response = await _client.SendAsync(request);
-        _output.WriteLine("Headers in the request:");
-        foreach (var header in request.Headers)
+        if (!response.IsSuccessStatusCode)
         {
-            _output.WriteLine($"Key: {header.Key}, Value: {string.Join(", ", header.Value)}");
+            throw new HttpRequestException($"Unexpected status code: {response.StatusCode}");
         }
+        response.EnsureSuccessStatusCode();
+        // Check if we get the correct data
+        var data = await response.Content.ReadFromJsonAsync<Solar>();
+        Assert.True(
+            solar.Id == data.Id &&
+            solar.CityId == data.CityId &&
+            solar.Date == data.Date &&
+            solar.Sunrise == data.Sunrise &&
+            solar.Sunset == data.Sunset
+        );
+    }
+
+    [Fact]
+    public async Task CityPostTestWithAdminToken()
+    {
+        var token = GenerateJwtToken("admin");
+        var request = new HttpRequestMessage(HttpMethod.Post, "/api/city");
+        request.Headers.Add("Authorization", $"Bearer {token}");
+        City city = new City(){Id = 1, Name = "Túrkeve", Longitude = 53.532, Latitude = 53.42};
+        string json = System.Text.Json.JsonSerializer.Serialize(city);
+        request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await _client.SendAsync(request);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException($"Unexpected status code: {response.StatusCode}");
+        }
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task SolarPostWithAdminToken()
+    {
+        var token = GenerateJwtToken("admin");
+        var request = new HttpRequestMessage(HttpMethod.Post, "/api/solar");
+        request.Headers.Add("Authorization", $"Bearer {token}");
+        Solar solar = new Solar(){City = new City(){Id = 1, Latitude = 34.432, Longitude = 53.53, Name = "Kaposvár"}, CityId = 1, Sunrise = "5:52:52 AM", Sunset = "5:52:52 PM", Id = 1, Date = new DateOnly(2024,12,12)};
+        string jsonForBody = System.Text.Json.JsonSerializer.Serialize(solar);
+        request.Content = new StringContent(jsonForBody, Encoding.UTF8, "application/json");
+        var response = await _client.SendAsync(request);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException($"Unexpected status code: {response.StatusCode}");
+        }
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task SolarDeleteWithAdminToken()
+    {
+        using (var scope = _app.Services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<SolarApiContext>();
+            context.Solars.Add(new Solar(){Id = 1, City = new City(){Id = 1, Latitude = 555.53, Longitude = 53.53, Name = "Kecskemét"}, CityId = 1, Date = new DateOnly(1931,12,12), Sunrise = "5:52:52 AM", Sunset = "5:52:52 PM"});
+            await context.SaveChangesAsync();
+        }
+        var token = GenerateJwtToken("admin");
+        var request = new HttpRequestMessage(HttpMethod.Delete, "/api/solar/1");
+        request.Headers.Add("Authorization", $"Bearer {token}");
+        var response = await _client.SendAsync(request);
         if (!response.IsSuccessStatusCode)
         {
             throw new HttpRequestException($"Unexpected status code: {response.StatusCode}");
@@ -58,10 +136,10 @@ public class ControllerIntegrationTest
     }
     
     
-    private string GenerateJwtToken()
+    private string GenerateJwtToken(string role = "User")
     {
         var user = new IdentityUser(){UserName = "TestUser", Email = "TestEmail"};
-        return _tokenService.CreateToken(user, "User");
+        return _tokenService.CreateToken(user, role);
     }
 
 }

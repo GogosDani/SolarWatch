@@ -22,19 +22,19 @@ public class AuthenticationSeeder
         tUser.Wait();
     }
     
-    public void AddAdmin()
+    public void AddAdmin(string name, string email, string password)
     {
-        var tAdmin = CreateAdminIfNotExists();
+        var tAdmin = CreateAdminIfNotExists(name ,email, password);
         tAdmin.Wait();
     }
 
-    private async Task CreateAdminIfNotExists()
+    private async Task CreateAdminIfNotExists(string name, string email, string password)
     {
-        var adminInDb = await userManager.FindByEmailAsync("admin@admin.com");
+        var adminInDb = await userManager.FindByEmailAsync(email);
         if (adminInDb == null)
         {
-            var admin = new IdentityUser { UserName = "admin", Email = "admin@admin.com" };
-            var adminCreated = await userManager.CreateAsync(admin, "admin123");
+            var admin = new IdentityUser { UserName = name, Email = email };
+            var adminCreated = await userManager.CreateAsync(admin,password);
 
             if (adminCreated.Succeeded)
             {

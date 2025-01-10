@@ -26,8 +26,9 @@ var connectionString = builder.Configuration["ConnectionString"];
 var issuer = builder.Configuration["ValidIssuer"];
 var audience = builder.Configuration["ValidAudience"];
 var jwtSecretKey = builder.Configuration["JwtSecretKey"];
-
-
+var adminUsername = builder.Configuration["AdminUsername"];
+var adminPassword = builder.Configuration["AdminPassword"];
+var adminEmail = builder.Configuration["AdminEmail"];
 // Call builder functions
         AddServices();
         ConfigureSwagger();
@@ -39,7 +40,7 @@ var jwtSecretKey = builder.Configuration["JwtSecretKey"];
 // Middlewares
         var app = builder.Build();
 
-    Migration();
+    // Migration();
 
         if (app.Environment.IsDevelopment())
         {
@@ -55,7 +56,7 @@ var jwtSecretKey = builder.Configuration["JwtSecretKey"];
         using var scope = app.Services.CreateScope(); 
         var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
         authenticationSeeder.AddRoles();
-        authenticationSeeder.AddAdmin();
+        authenticationSeeder.AddAdmin(adminEmail, adminUsername, adminPassword);
         app.Run();
         
 
@@ -187,16 +188,16 @@ void AddAuthentication()
                         .AllowAnyMethod());
             });
         }
-        void Migration()
-        {
-            using (var scope = app.Services.CreateScope())
-            {
-                var solarDb = scope.ServiceProvider.GetRequiredService<SolarApiContext>();
-                var usersDb = scope.ServiceProvider.GetRequiredService<UsersContext>();
-                solarDb.Database.Migrate();
-                usersDb.Database.Migrate();
-            }
-        }
+        // void Migration()
+        // {
+        //     using (var scope = app.Services.CreateScope())
+        //     {
+        //         var solarDb = scope.ServiceProvider.GetRequiredService<SolarApiContext>();
+        //         var usersDb = scope.ServiceProvider.GetRequiredService<UsersContext>();
+        //         solarDb.Database.Migrate();
+        //         usersDb.Database.Migrate();
+        //     }
+        // }
 
 
 

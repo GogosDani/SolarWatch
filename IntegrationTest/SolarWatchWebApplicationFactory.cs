@@ -51,20 +51,6 @@ public class SolarWatchWebApplicationFactory : WebApplicationFactory<Program>
             userContext.Database.EnsureDeleted();
             userContext.Database.EnsureCreated();
             
-            
-            // MOCKS
-            // var mockCityDataProvider = new Mock<ICityDataProvider>();
-            // mockCityDataProvider.Setup(x => x.GetCityData(It.IsAny<string>()))
-            //     .ReturnsAsync("{\"cityName\":\"London\",\"latitude\":51.5074,\"longitude\":-0.1278}");
-            //
-            // services.AddSingleton(mockCityDataProvider.Object);
-            //
-            // var mockSolarInfoProvider = new Mock<ISolarInfoProvider>();
-            // mockSolarInfoProvider.Setup(x => x.GetSolarData(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<DateOnly>()))
-            //     .ReturnsAsync("{\"solarEnergy\":\"1234\",\"sunrise\":\"07:00\",\"sunset\":\"18:00\"}");
-            //
-            // services.AddSingleton(mockSolarInfoProvider.Object);
-
         });
     }
 }

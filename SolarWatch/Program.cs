@@ -38,7 +38,7 @@ AddCors();
 // Middlewares
 var app = builder.Build();
 
-
+Migration();
 
 if (app.Environment.IsDevelopment())
 {
@@ -184,4 +184,16 @@ void AddCors()
                 .AllowAnyMethod());
     });
 
+}
+
+void Migration()
+{
+    Console.WriteLine("Conasdsadasssssssssss" + connectionString);
+    using (var scope = app.Services.CreateScope())
+    {
+        var solarDb = scope.ServiceProvider.GetRequiredService<SolarApiContext>();
+        var usersDb = scope.ServiceProvider.GetRequiredService<UsersContext>();
+        solarDb.Database.Migrate();
+        usersDb.Database.Migrate();
+    }
 }

@@ -1,26 +1,22 @@
 services:
   frontend:
     build:
-      context: .
-      dockerfile: Frontend/vite-project/Dockerfile
+      context: Frontend/vite-project
     ports:
-      - 3000:3000
+      - "4000:4000"
         
   backend:
     image: solarwatchbackend
     build:
-      context: .
-      dockerfile: SolarWatch/Dockerfile
-    environment:
-      - CONNECTIONSTRINGS__DEFAULT=Server=localhost,11433;Database=SolarWatch;User Id=sa;Password=Kokikutya0123!;Encrypt=false;
+      context: SolarWatch/
+    env_file:
+      - .env
     ports:
-      - 8080:8080
+      - "8080:8080"
     
   db:
     image: mcr.microsoft.com/mssql/server
-    environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=Kokikutya0123!
+    env_file:
+      - .env
     ports:
-      - 11433:1433
-  
+      - "1433:1433"

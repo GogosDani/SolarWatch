@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using dotenv.net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,20 +11,22 @@ using SolarWatch.Services;
 using SolarWatch.Services.Authentication;
 using SolarWatch.Services.JsonParsers;
 using SolarWatch.Services.Repositories;
+using dotenv.net;
 
 
-        var builder = WebApplication.CreateBuilder(args);
 
-        DotEnv.Load();
-        builder.Configuration.AddEnvironmentVariables();
+var builder = WebApplication.CreateBuilder(args);
 
-// Variables from env or appsettings
-        var connectionString = builder.Configuration["ConnectionString"];
-        var issuer = builder.Configuration["ValidIssuer"];
-        var audience = builder.Configuration["ValidAudience"];
-        var jwtSecretKey = builder.Configuration["JwtSecretKey"];
-        Console.WriteLine(issuer);
-        Console.WriteLine(audience);
+DotEnv.Load();
+builder.Configuration.AddEnvironmentVariables();
+
+
+// Variables from usersecrets or appsettings
+var connectionString = builder.Configuration["ConnectionString"];
+var issuer = builder.Configuration["ValidIssuer"];
+var audience = builder.Configuration["ValidAudience"];
+var jwtSecretKey = builder.Configuration["JwtSecretKey"];
+
 
 // Call builder functions
         AddServices();
@@ -36,7 +39,7 @@ using SolarWatch.Services.Repositories;
 // Middlewares
         var app = builder.Build();
 
-
+    Migration();
 
         if (app.Environment.IsDevelopment())
         {
@@ -121,27 +124,40 @@ using SolarWatch.Services.Repositories;
             });
         }
 
-        void AddAuthentication()
+void AddAuthentication()
+{
+    builder.Services
+        .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
         {
-            builder.Services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+            options.TokenValidationParameters = new TokenValidationParameters()
+            {
+                ClockSkew = TimeSpan.Zero,
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = issuer,
+                ValidAudience = audience,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(jwtSecretKey)
+                ),
+            };
+            options.Events = new JwtBearerEvents
+            {
+                OnTokenValidated = context =>
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters()
+                    var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+                    var roleClaim = claimsIdentity.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name");
+                    if (roleClaim != null)
                     {
-                        ClockSkew = TimeSpan.Zero,
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = issuer,
-                        ValidAudience = audience,
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(jwtSecretKey)
-                        ),
-                    };
-                });
-        }
+                        claimsIdentity.AddClaim(new Claim(ClaimsIdentity.DefaultRoleClaimType, roleClaim.Value));
+                    }
+                    return Task.CompletedTask;
+                }
+            };
+        });
+}
 
         void AddIdentity()
         {
@@ -171,6 +187,18 @@ using SolarWatch.Services.Repositories;
                         .AllowAnyMethod());
             });
         }
+        void Migration()
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var solarDb = scope.ServiceProvider.GetRequiredService<SolarApiContext>();
+                var usersDb = scope.ServiceProvider.GetRequiredService<UsersContext>();
+                solarDb.Database.Migrate();
+                usersDb.Database.Migrate();
+            }
+        }
+
+
 
         public partial class Program
         {

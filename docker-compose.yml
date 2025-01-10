@@ -3,20 +3,23 @@ services:
     build:
       context: Frontend/vite-project
     ports:
-      - 3000:3000
+      - "4000:4000"
         
   backend:
     build:
+<<<<<<< HEAD
       context: SolarWatch
+=======
+      context: SolarWatch/
+>>>>>>> main
     env_file:
       - .env
     ports:
-      - 8080:8080
+      - "8080:8080"
     
   db:
     image: mcr.microsoft.com/mssql/server
     env_file:
       - .env
     ports:
-      - 11433:1433
-  
+      - "1433:1433"

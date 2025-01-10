@@ -1,6 +1,6 @@
 import SolarForm from "../Components/SolarDataform"
 import { useState, useEffect } from "react";
-import api from "../Axios/api";
+import { apiWithAuth } from "../Axios/api";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
@@ -22,7 +22,7 @@ export default function SolarCreator() {
 
     async function postSolar(newData, e) {
         e.preventDefault();
-        const response = await api.post("/SolarWatch/SolarInfo",
+        const response = await apiWithAuth.post("/api/solar",
             JSON.stringify(newData),
             {
                 headers: {
@@ -39,7 +39,10 @@ export default function SolarCreator() {
     return (
         <>
             {errorMessage ? (<h1 className="error-message"> {errorMessage} </h1>) : (
-                <SolarForm apiMethod={postSolar} />
+                <>
+                    <button onClick={(e) => navigate("/admin")} className="back-button"> BACK </button>
+                    <SolarForm apiMethod={postSolar} />
+                </>
             )}
         </>
     )

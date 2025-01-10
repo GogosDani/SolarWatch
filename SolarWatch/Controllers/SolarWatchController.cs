@@ -12,7 +12,6 @@ namespace SolarWatch.Controllers;
 public class SolarWatchController : ControllerBase
 {
 
-    private readonly ILogger<SolarWatchController> _logger;
     private readonly ICityDataProvider _cityDataProvider;
     private readonly ICityParser _cityParser;
     private readonly ISolarInfoProvider _solarInfoProvider;
@@ -20,9 +19,8 @@ public class SolarWatchController : ControllerBase
     private readonly ICityRepository _cityRepository;
     private readonly ISolarRepository _solarRepository;
 
-    public SolarWatchController(ILogger<SolarWatchController> logger, ICityDataProvider cityDataProvider, ICityParser cityParser , ISolarInfoProvider solarInfoProvider, ISolarParser solarParser, ISolarRepository solarRepository, ICityRepository cityRepository)
+    public SolarWatchController(ICityDataProvider cityDataProvider, ICityParser cityParser , ISolarInfoProvider solarInfoProvider, ISolarParser solarParser, ISolarRepository solarRepository, ICityRepository cityRepository)
     {
-        _logger = logger;
         _cityDataProvider = cityDataProvider;
         _cityParser = cityParser;
         _solarInfoProvider = solarInfoProvider;
@@ -36,14 +34,14 @@ public class SolarWatchController : ControllerBase
     {
         try
         {
-            var city = _cityRepository.GetByName(cityName);
+            var city = await _cityRepository.GetByName(cityName);
             Solar solarData = null;
             // city can be null now, if there isn't any data for that city in the DB
             if (city == null)
             {
                 // Get the city data from the API
                 var cityJson = await _cityDataProvider.GetCityData(cityName);
-                city = _cityParser.Process(cityJson);
+                city =  _cityParser.Process(cityJson);
                 var cityId = _cityRepository.Add(city);
                 // If we added the city to the DB just now, we should get the solar data from te API too.
                 solarData = await GetSolarDataFromApi(city, date);
@@ -52,7 +50,7 @@ public class SolarWatchController : ControllerBase
             else
             {
                 // Try to get the solar data from the DB too.
-                solarData = _solarRepository.Get(date, city.Id);
+                solarData = await _solarRepository.Get(date, city.Id);
                 if (solarData == null)
                 {
                     solarData = await GetSolarDataFromApi(city, date);
@@ -76,34 +74,11 @@ public class SolarWatchController : ControllerBase
         
     }
 
-    [HttpPost("City"), Authorize(Roles = "Admin")]
-    public async Task<ActionResult> Post([FromBody] City city)
-    {
-        try
-        {
-            _cityRepository.Add(city);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpPost("SolarInfo"), Authorize(Roles = "Admin")]
-    public async Task<ActionResult> Post([FromBody] Solar solar)
-    {
-        try
-        {
-            _solarRepository.Add(solar);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
     
+
+    
+
+   
     
     private async Task<Solar> GetSolarDataFromApi(City city, DateOnly date)
     {

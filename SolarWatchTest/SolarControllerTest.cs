@@ -28,10 +28,9 @@ public class SolarControllerTest
         _solarInfoReader = new Mock<ISolarInfoProvider>();
         _cityParser = new Mock<ICityParser>();
         _solarParser = new Mock<ISolarParser>();
-        _mockLogger = new Mock<ILogger<SolarWatchController>>();
         _cityRepository = new Mock<ICityRepository>();
         _solarRepository = new Mock<ISolarRepository>();
-        _controller = new SolarWatchController(_mockLogger.Object, _cityApiReader.Object, _cityParser.Object, _solarInfoReader.Object, _solarParser.Object, _solarRepository.Object, _cityRepository.Object);
+        _controller = new SolarWatchController(_cityApiReader.Object, _cityParser.Object, _solarInfoReader.Object, _solarParser.Object, _solarRepository.Object, _cityRepository.Object);
     }
 
     [Test]
@@ -47,8 +46,8 @@ public class SolarControllerTest
     {
         City city = new City();
         Solar solar = new Solar();
-        _cityRepository.Setup(x => x.GetByName(It.IsAny<string>())).Returns(city);
-        _solarRepository.Setup(x => x.Get(It.IsAny<DateOnly>(), It.IsAny<int>())).Returns(solar);
+        _cityRepository.Setup(x => x.GetByName(It.IsAny<string>())).ReturnsAsync(city);
+        _solarRepository.Setup(x => x.Get(It.IsAny<DateOnly>(), It.IsAny<int>())).ReturnsAsync(solar);
         var result = await _controller.GetSolarInfos("budapest", new DateOnly(2021, 12, 10));
         Assert.IsInstanceOf(typeof(OkObjectResult), result.Result);
         Assert.That(((OkObjectResult)result.Result).Value, Is.EqualTo(solar));
@@ -60,7 +59,7 @@ public class SolarControllerTest
         City city = new City();
         Solar solar = new Solar();
         // returns null because we don't have this data in our DB yet.
-        _cityRepository.Setup(x => x.GetByName(It.IsAny<string>())).Returns((City?)null);
+        _cityRepository.Setup(x => x.GetByName(It.IsAny<string>())).ReturnsAsync((City?)null);
         // Get the data from API instead
         _cityApiReader.Setup(x => x.GetCityData(It.IsAny<string>())).ReturnsAsync("city");
         _cityParser.Setup(x => x.Process(It.IsAny<string>())).Returns(city);

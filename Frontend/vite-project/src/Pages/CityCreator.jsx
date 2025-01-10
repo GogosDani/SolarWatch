@@ -1,6 +1,6 @@
 import CityForm from "../Components/CityForm"
 import { useState, useEffect } from "react";
-import api from "../Axios/api";
+import { apiWithAuth } from "../Axios/api";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 export default function CityCreator() {
@@ -21,7 +21,7 @@ export default function CityCreator() {
 
     async function postCity(newData, e) {
         e.preventDefault();
-        const response = await api.post("/SolarWatch/City",
+        const response = await apiWithAuth.post("/api/city",
             JSON.stringify(newData),
             {
                 headers: {
@@ -37,8 +37,11 @@ export default function CityCreator() {
     return (
         <>
             {errorMessage ? (<h1 className="error-message"> {errorMessage} </h1>) : (
+                <>
+                    <button onClick={(e) => navigate("/admin")} className="back-button"> BACK </button>
+                    <CityForm apiMethod={postCity} />
+                </>
 
-                <CityForm apiMethod={postCity} />
             )}
 
         </>

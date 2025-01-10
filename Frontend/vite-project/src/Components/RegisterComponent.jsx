@@ -30,6 +30,7 @@ export default function RegisterComponent({ handleRegister, setRegister }) {
                     {isPasswordValid ? "" : <p> Password must be at least 8 characters long! </p>}
                 </div>
             </form>
+
         </>
     )
 }

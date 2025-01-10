@@ -7,6 +7,8 @@ import MainApp from "./Pages/MainApp";
 import AdminPage from "./Pages/AdminPage";
 import CityCreator from "./Pages/CityCreator"
 import SolarCreator from "./Pages/SolarCreator"
+import SolarEditor from "./Pages/SolarEditor"
+import CityEditor from "./Pages/CityEditor"
 
 
 const router = createBrowserRouter([
@@ -29,6 +31,14 @@ const router = createBrowserRouter([
   {
     path: "/create/solar",
     element: <SolarCreator />
+  },
+  {
+    path: "/edit/solar/:id",
+    element: <SolarEditor />
+  },
+  {
+    path: "/edit/city/:id",
+    element: <CityEditor />
   }
 ])
 

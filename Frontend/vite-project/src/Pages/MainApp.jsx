@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react"
-import api from "../Axios/api"
+import { apiWithAuth } from "../Axios/api";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-
 
 export default function MainApp() {
 
@@ -36,7 +35,7 @@ export default function MainApp() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        const response = await api.get("/SolarWatch", {
+        const response = await apiWithAuth.get("/SolarWatch", {
             params: {
                 cityName: city,
                 date: date
@@ -46,43 +45,56 @@ export default function MainApp() {
         setInfo(data);
     }
 
+    function handleLogout() {
+        localStorage.removeItem("token");
+        navigate("/")
+    }
+
     return (
         <>
-            {isAdmin && <button className="admin-button" onClick={() => navigate("/admin")}> ADMIN INTERFACE </button>}
             {errorMessage ? (<h1 className="error-message"> {errorMessage} </h1>) : (
-
-                <div className="main-app-div">
-                    <div className="search-form-div">
-                        <p className="title-solar"> SolarWatch </p>
-                        <form className="search-form" onSubmit={(e) => handleSubmit(e)}>
-                            <label className="search-form-label"> Type a city here </label>
-                            <input className="search-form-input" required onChange={(e) => setCity(e.target.value)} />
-                            <label className="search-form-label"> Add the date </label>
-                            <input className="search-form-input" required onChange={(e) => setDate(e.target.value)} type="date" />
-                            <button className="search-submit" disabled={city === "" ? true : false}> Submit </button>
-                        </form>
+                <>
+                    <div className="main-header">
+                        {isAdmin && <button className="admin-button" onClick={() => navigate("/admin")}> ADMIN INTERFACE </button>}
+                        <button className="logout-button" onClick={() => handleLogout()}> LOGOUT </button>
                     </div>
-                    <div className="solar-info-div">
-                        {Object.keys(info).length == 0 ? "" : (
-                            <>
-                                <div className="solar-info-top">
-                                    <p className="city-info"> {info.city.name} - {info.date}</p>
-                                </div>
-                                <div className="solar-info-bottom">
-                                    <div className="left">
-                                        <p className="solar-data"> {info.sunrise} </p>
-                                        <p className="solar-data"> SUNRISE </p>
+                    <div className="main-app-div">
+                        <div className="search-form-div">
+                            <p className="title-solar"> SolarWatch </p>
+                            <form className="search-form" onSubmit={(e) => handleSubmit(e)}>
+                                <label className="search-form-label"> Type a city here </label>
+                                <input className="search-form-input" required onChange={(e) => setCity(e.target.value)} />
+                                <label className="search-form-label"> Add the date </label>
+                                <input className="search-form-input" required onChange={(e) => setDate(e.target.value)} type="date" />
+                                <button className="search-submit" disabled={city === "" ? true : false}> Submit </button>
+                            </form>
+                        </div>
+                        <div className="solar-info-div">
+                            {Object.keys(info).length == 0 ? "" : (
+                                <>
+                                    <div className="solar-info-top">
+                                        <p className="city-info"> {info.city.name} - {info.date}</p>
                                     </div>
-                                    <div className="right">
-                                        <p className="solar-data"> {info.sunset} </p>
-                                        <p className="solar-data"> SUNSET </p>
+                                    <div className="solar-info-bottom">
+                                        <div className="left">
+                                            <p className="solar-data"> {info.sunrise} </p>
+                                            <p className="solar-data"> SUNRISE </p>
+                                        </div>
+                                        <div className="right">
+                                            <p className="solar-data"> {info.sunset} </p>
+                                            <p className="solar-data"> SUNSET </p>
+                                        </div>
                                     </div>
-                                </div>
-                            </>
-                        )
-                        }
+                                </>
+                            )
+                            }
+                        </div>
                     </div>
+<<<<<<< HEAD
                 </div>
+=======
+                </>
+>>>>>>> main
             )}
         </>
     )

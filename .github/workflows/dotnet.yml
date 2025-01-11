@@ -14,16 +14,31 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+    - name: Set Environment Variables
+      env:
+        JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      run: echo "Environment variable JWT_SECRET_KEY set"
+    - name: Debug Environment Variable
+      env:
+        JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      run: |
+        if [ -z "$JWT_SECRET_KEY" ]; then
+        echo "JWT_SECRET_KEY is not set!"
+        exit 1
+        else
+        echo "JWT_SECRET_KEY is set!"
+        fi
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Test
+      env: # Pass the JWT_SECRET_KEY to the test step
+        JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
       run: dotnet test --no-build --verbosity normal

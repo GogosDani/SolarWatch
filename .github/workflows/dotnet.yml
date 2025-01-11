@@ -20,10 +20,12 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Set Environment Variables
-      env:
-        JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-      run: echo "Environment variable JWT_SECRET_KEY set"
+    - name: Set up environment variables
+      run: |
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
+          echo "JWTSECRETKEY=${{ secrets.JWTSECRETKEY }}" >> $GITHUB_ENV
+          echo "VALID_AUDIENCE=${{ secrets.VALIDAUDIENCE }}" >> $GITHUB_ENV
+          echo "VALID_ISSUER=${{ secrets.VALIDISSUER }}" >> $GITHUB_ENV
     - name: Debug Environment Variable
       env:
         JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}

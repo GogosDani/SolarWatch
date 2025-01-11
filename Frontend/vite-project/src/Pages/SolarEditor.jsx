@@ -11,7 +11,7 @@ export default function SolarEditor() {
 
     useEffect(() => {
         async function getSolar() {
-            const response = await apiWithAuth.get(`/api/solar/getbyid/${id}`);
+            const response = await apiWithAuth.get(`/api/solar/${id}`);
             const data = await response.data
             setSolar(prev => data);
         }

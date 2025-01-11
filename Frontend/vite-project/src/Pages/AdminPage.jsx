@@ -29,7 +29,7 @@ export default function AdminPage() {
     // Get city datas by page
     useEffect(() => {
         async function GetCityDatas() {
-            const response = await apiWithAuth.get(`/api/city/${cityPage}`)
+            const response = await apiWithAuth.get(`/api/city/page/${cityPage}`)
             setCities(prev => response.data);
         }
         GetCityDatas();
@@ -39,7 +39,7 @@ export default function AdminPage() {
     // Get solar datas by page
     useEffect(() => {
         async function GetSolarDatas() {
-            const response = await apiWithAuth.get(`/api/solar/${solarPage}`)
+            const response = await apiWithAuth.get(`/api/solar/page/${solarPage}`)
             setSolars(prev => response.data);
         }
         GetSolarDatas();

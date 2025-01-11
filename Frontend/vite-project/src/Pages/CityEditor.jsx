@@ -11,7 +11,7 @@ export default function CityEditor() {
 
     useEffect(() => {
         async function getCity() {
-            const response = await apiWithAuth.get(`/api/city/getbyid/${id}`);
+            const response = await apiWithAuth.get(`/api/city/${id}`);
             const data = await response.data
             setCity(prev => data);
         }

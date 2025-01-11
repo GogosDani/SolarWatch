@@ -15,7 +15,7 @@ public class CityController : ControllerBase
         _cityRepository = cityRepository;
     }
 
-    [HttpGet("/api/city/getbyid/{id}"), Authorize(Roles = "admin")]
+    [HttpGet("{id}"), Authorize(Roles = "admin")]
     public async Task<ActionResult> GetCityById(int id)
     {
         try
@@ -71,7 +71,7 @@ public class CityController : ControllerBase
         }
     }
 
-    [HttpGet("{pageNumber}"), Authorize(Roles = "admin")] 
+    [HttpGet("/api/city/page/{pageNumber}"), Authorize(Roles = "admin")] 
     public async Task<ActionResult> GetByPage(int pageNumber)
     {
         try

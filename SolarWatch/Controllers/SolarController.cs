@@ -16,7 +16,7 @@ public class SolarController : ControllerBase
         _solarRepository = repository;
     }
     
-    [HttpGet("/api/solar/{id}"), Authorize(Roles = "admin")]
+    [HttpGet("{id}"), Authorize(Roles = "admin")]
     public async Task<ActionResult> GetSolarById(int id)
     {
         try
@@ -72,7 +72,7 @@ public class SolarController : ControllerBase
         }
     }
 
-    [HttpGet("api/solar/page/{pageNumber}"), Authorize(Roles = "admin")]
+    [HttpGet("/api/solar/page/{pageNumber}"), Authorize(Roles = "admin")]
     public async Task<ActionResult> GetByPage(int pageNumber)
     {
         try

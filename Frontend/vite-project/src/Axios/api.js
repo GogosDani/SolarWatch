@@ -1,6 +1,5 @@
 import axios from 'axios';
 const baseURL = import.meta.env.VITE_API_BASE_URL;
-console.log(baseURL);
 
 // for sending request with token in headers
 const apiWithAuth = axios.create({

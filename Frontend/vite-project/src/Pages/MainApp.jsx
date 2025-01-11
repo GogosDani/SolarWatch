@@ -90,11 +90,7 @@ export default function MainApp() {
                             }
                         </div>
                     </div>
-<<<<<<< HEAD
-                </div>
-=======
                 </>
->>>>>>> main
             )}
         </>
     )

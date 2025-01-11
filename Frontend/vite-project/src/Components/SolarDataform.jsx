@@ -29,9 +29,6 @@ export default function SolarForm({ apiMethod, solar }) {
         }
     }, [validTime])
 
-    useEffect(() => {
-        console.log(solar)
-    }, [])
 
     return (
         <div className="search-form-div">
@@ -43,7 +40,7 @@ export default function SolarForm({ apiMethod, solar }) {
                 <input className="search-form-input" type="date" value={solarData.date} onChange={(e) => setSolarData(prev => ({ ...prev, date: e.target.value }))} />
                 <label className="search-form-label"> Sunrise </label>
                 <input className="search-form-input" type="text" value={solarData.sunrise} onChange={(e) => setSolarData(prev => ({ ...prev, sunrise: e.target.value }))} />
-                <label className="search-form-label"> Sunrise </label>
+                <label className="search-form-label"> Sunset </label>
                 <input className="search-form-input" type="text" value={solarData.sunset} onChange={(e) => setSolarData(prev => ({ ...prev, sunset: e.target.value }))} />
                 <button disabled={!validTime} className="search-submit"> Submit </button>
             </form>

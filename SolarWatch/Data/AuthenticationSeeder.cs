@@ -21,27 +21,6 @@ public class AuthenticationSeeder
         var tUser = CreateUserRole(roleManager);
         tUser.Wait();
     }
-    
-    public void AddAdmin(string name, string email, string password)
-    {
-        var tAdmin = CreateAdminIfNotExists(name ,email, password);
-        tAdmin.Wait();
-    }
-
-    private async Task CreateAdminIfNotExists(string name, string email, string password)
-    {
-        var adminInDb = await userManager.FindByEmailAsync(email);
-        if (adminInDb == null)
-        {
-            var admin = new IdentityUser { UserName = name, Email = email };
-            var adminCreated = await userManager.CreateAsync(admin,password);
-
-            if (adminCreated.Succeeded)
-            {
-                await userManager.AddToRoleAsync(admin, "Admin");
-            }
-        }
-    }
 
     private async Task CreateAdminRole(RoleManager<IdentityRole> roleManager)
     {

@@ -31,7 +31,7 @@ public class ControllerIntegrationTest
         var builder = new ConfigurationBuilder()
             .AddUserSecrets<ControllerIntegrationTest>(); 
         var configuration = builder.Build();
-        var secretKey = configuration["JWT_SECRET_KEY"];
+        var secretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
        
         _app = new SolarWatchWebApplicationFactory();
         _client = _app.CreateClient();

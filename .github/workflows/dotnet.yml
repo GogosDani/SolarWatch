@@ -55,5 +55,5 @@ jobs:
           
     - name: Build and Push Docker images using Docker Compose
       run: |
-          docker compose --env-file .env -f -f docker-compose.yml build
-          docker compose --env-file .env -f -f docker-compose.yml push
+          docker compose --env-file .env -f docker-compose.yml build
+          docker compose --env-file .env -f docker-compose.yml push

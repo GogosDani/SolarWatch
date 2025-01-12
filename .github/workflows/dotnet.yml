@@ -20,25 +20,40 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Set Environment Variables
-      env:
-        JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-      run: echo "Environment variable JWT_SECRET_KEY set"
-    - name: Debug Environment Variable
-      env:
-        JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+    - name: Set up environment variables
       run: |
-        if [ -z "$JWT_SECRET_KEY" ]; then
-        echo "JWT_SECRET_KEY is not set!"
-        exit 1
-        else
-        echo "JWT_SECRET_KEY is set!"
-        fi
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
+          echo "JWTSECRETKEY=${{ secrets.JWTSECRETKEY }}" >> $GITHUB_ENV
+          echo "VALID_AUDIENCE=${{ secrets.VALIDAUDIENCE }}" >> $GITHUB_ENV
+          echo "VALID_ISSUER=${{ secrets.VALIDISSUER }}" >> $GITHUB_ENV
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      env: # Pass the JWT_SECRET_KEY to the test step
+      env: 
         JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
       run: dotnet test --no-build --verbosity normal
+
+    - name: Create .env file
+      run: |
+          echo "JWTSECRETKEY=${{ secrets.JWTSECRETKEY }}" >> .env
+          echo "VALIDAUDIENCE=${{ secrets.VALIDAUDIENCE }}" >> .env
+          echo "VALIDISSUER=${{ secrets.VALIDISSUER }}" >> .env
+          echo "MSSQL_SA_PASSWORD=${{ secrets.MSSQL_SA_PASSWORD }}" >> .env
+          echo "CONNECTIONSTRING=${{ secrets.CONNECTIONSTRING }}" >> .env
+          echo "ACCEPT_EULA=${{ secrets.ACCEPT_EULA}}" >> .env
+          echo "ADMINUSERNAME=${{ secrets.ADMINUSERNAM}}" >> .env
+          echo "ADMINPASSWORD=${{ secrets.ADMINPASSWORD}}" >> .env
+          echo "ADMINEMAIL=${{ secrets.ADMINEMAIL}}" >> .env
+
+    - name: Log in to DockerHub
+      uses: docker/login-action@v2
+      with:
+          username: ${{ secrets.DOCKER_USERNAME }} 
+          password: ${{ secrets.DOCKER_TOKEN }}   
+          
+    - name: Build and Push Docker images using Docker Compose
+      run: |
+          docker compose --env-file .env -f docker-compose.yml build
+          docker compose --env-file .env -f docker-compose.yml push

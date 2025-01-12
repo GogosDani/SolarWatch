@@ -6,7 +6,7 @@ services:
       - "4000:4000"
   
   backend:
-    image: solarwatchbackend
+    image: gogosdani/solarwatch
     build:
       context: SolarWatch/
     env_file:

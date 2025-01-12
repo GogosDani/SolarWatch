@@ -187,16 +187,16 @@ void AddAuthentication()
                         .AllowAnyMethod());
             });
         }
-        // void Migration()
-        // {
-        //     using (var scope = app.Services.CreateScope())
-        //     {
-        //         var solarDb = scope.ServiceProvider.GetRequiredService<SolarApiContext>();
-        //         var usersDb = scope.ServiceProvider.GetRequiredService<UsersContext>();
-        //         solarDb.Database.Migrate();
-        //         usersDb.Database.Migrate();
-        //     }
-        // }
+        void Migration()
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var solarDb = scope.ServiceProvider.GetRequiredService<SolarApiContext>();
+                var usersDb = scope.ServiceProvider.GetRequiredService<UsersContext>();
+                solarDb.Database.Migrate();
+                usersDb.Database.Migrate();
+            }
+        }
 
 
 

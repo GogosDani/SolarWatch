@@ -4,16 +4,16 @@ services:
       context: Frontend/vite-project
     ports:
       - "4000:4000"
-  
+
   backend:
     image: gogosdani/solarwatch
     build:
-      context: SolarWatch/
+      context: SolarWatchBackend/
     env_file:
       - .env
     ports:
       - "8080:8080"
-  
+
   db:
     image: mcr.microsoft.com/mssql/server
     env_file:

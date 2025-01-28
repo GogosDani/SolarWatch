@@ -60,10 +60,11 @@ Make sure you have the following installed:
         npm start
 
 ### Using Docker
-1, Build and run the containers using Docker Compose:
-        docker-compose build
-        docker-compose up
-
+1, Build docker compose: docker compose build
+2, Run DB: docker compose up db
+3, Open backend folder, use migrations: cd SolarWatch --> dotnet ef database update --context "SolarApiContext"     2, dotnet ef database update --context "UsersContext"
+4, Step back, run docker compose: cd ..  --> docker compose up
+5, Access the app: Open your browser, navigate to http://localhost:4000.
 
 
 

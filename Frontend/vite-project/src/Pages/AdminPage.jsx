@@ -17,6 +17,7 @@ export default function AdminPage() {
     // Check if the logged user have admin role
     useEffect(() => {
         const token = localStorage.getItem("token");
+        if (token == null) navigate("/");
         const decodedToken = jwtDecode(token);
         if (decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != "Admin") {
             setErrorMessage("You are not allowed to visit this page!");

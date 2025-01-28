@@ -8,7 +8,7 @@ export default function Page() {
     const [login, setLogin] = useState(false);
     const [register, setRegister] = useState(false);
     const [isSuccessful, setIsSuccessful] = useState(false);
-    const [registrationFailed, setRegistrationFailed] = useState(false);
+    const [authError, setAuthError] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,12 +21,12 @@ export default function Page() {
     }, [isSuccessful])
 
     useEffect(() => {
-        if (registrationFailed) {
+        if (authError != "") {
             setTimeout(() => {
-                setRegistrationFailed(false);
-            }, 3000);
+                setAuthError("")
+            }, 4000);
         }
-    }, [registrationFailed])
+    }, [authError])
 
 
     async function handleLogin(userData, e) {
@@ -43,24 +43,42 @@ export default function Page() {
                 navigate("/app");
             }
         } catch (error) {
-            console.error("Login failed:", error);
+            if (error.response && error.response.data) {
+                const firstError = Object.values(error.response.data)
+                setAuthError(firstError || "An error occurred during registration.");
+            } else {
+                setAuthError("Unexpected error. Please try again.");
+            }
         }
     }
 
     async function handleRegister(userData, e) {
         e.preventDefault();
+        if (userData.password != userData.confirmPassword) {
+            setAuthError("Passwords must match!")
+            return;
+        }
+        if (userData.password.length < 8) {
+            setAuthError("Password length must be at least 8 character!");
+            return;
+        }
         try {
             const response = await api.post("/Auth/register", {
                 username: userData.username,
                 password: userData.password,
                 email: userData.email
             });
-            if (response.status === 200) {
+            if (response.status === 201) {
                 setIsSuccessful(true);
             }
         } catch (error) {
-            console.error("Registration failed:", error);
-            setRegistrationFailed(true);
+            if (error.response && error.response.data) {
+                const firstError = Object.values(error.response.data)
+                setAuthError(firstError || "An error occurred during registration.");
+            } else {
+                setAuthError("Unexpected error. Please try again.");
+
+            }
         }
     }
 
@@ -81,9 +99,9 @@ export default function Page() {
                     <p className="success-text">Registration successful!</p>
                 </div>
             )}
-            {registrationFailed && (
+            {authError != "" && (
                 <div className="failed-popup">
-                    <p className="failed-text">User already exists!</p>
+                    <p className="failed-text">{authError}!</p>
                 </div>
             )}
         </div>

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarWatch", "SolarWatch\SolarWatch.csproj", "{CB422DD8-60BE-446A-932F-5AAB23BE8C5B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarWatch", "SolarWatchBackend\SolarWatch.csproj", "{CB422DD8-60BE-446A-932F-5AAB23BE8C5B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarWatchTest", "SolarWatchTest\SolarWatchTest.csproj", "{DF975FDD-7AE8-494F-AE45-4A24D33C24BC}"
 EndProject

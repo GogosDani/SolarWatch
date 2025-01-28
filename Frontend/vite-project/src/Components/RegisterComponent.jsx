@@ -1,15 +1,6 @@
 import { useState, useEffect } from "react"
 export default function RegisterComponent({ handleRegister, setRegister }) {
     const [userData, setUserData] = useState({ username: "", password: "", confirmPassword: "", email: "" });
-    const [samePasswords, setSamePasswords] = useState(true);
-    const [isPasswordValid, setIsPasswordValid] = useState(false);
-    useEffect(() => {
-        setSamePasswords(userData.password === userData.confirmPassword);
-    }, [userData.password, userData.confirmPassword])
-
-    useEffect(() => {
-        setIsPasswordValid(userData.password.length >= 8);
-    }, [userData.password])
 
 
     return (
@@ -24,11 +15,7 @@ export default function RegisterComponent({ handleRegister, setRegister }) {
                 <input className="auth-input" type="password" id="password-input" onChange={(e) => setUserData(prev => ({ ...prev, password: e.target.value }))} />
                 <label className="auth-label" htmlFor="confirmPassword-input"> Confirm password:</label>
                 <input className="auth-input" type="password" id="confirmPassword-input" onChange={(e) => setUserData(prev => ({ ...prev, confirmPassword: e.target.value }))} />
-                <button disabled={!samePasswords || !isPasswordValid} className="submit-button"> Register </button>
-                <div className="error-messages">
-                    {samePasswords ? "" : <p> Password inputs must match! </p>}
-                    {isPasswordValid ? "" : <p> Password must be at least 8 characters long! </p>}
-                </div>
+                <button className="submit-button"> Register </button>
             </form>
 
         </>

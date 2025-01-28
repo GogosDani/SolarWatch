@@ -44,6 +44,20 @@ Make sure you have the following installed:
 
 ## Start the App
 
+0. : Prepare dotenv file
+        If you're running the app using Docker, go to the main SolarWatch folder. Copy the .env.sample file and rename it to .env.
+        If you're running the app without Docker, go to the SolarWatchBackend folder. Copy the .env.sample file and rename it to .env.
+        These .env files contain the necessary environment variables for the app to function properly.
+
+### Using Docker
+
+1, Build docker compose: docker compose build
+2, Run DB: docker compose up db
+3, Open backend folder, use migrations: cd SolarWatch --> dotnet ef database update --context "SolarApiContext"     2, dotnet ef database update --context "UsersContext"
+4, Step back, run docker compose: cd ..  --> docker compose up
+5, Access the app: Open your browser, navigate to http://localhost:4000.
+
+
 ### Without Docker
 
 1. Start the database using Docker:
@@ -59,12 +73,7 @@ Make sure you have the following installed:
         npm install
         npm start
 
-### Using Docker
-1, Build docker compose: docker compose build
-2, Run DB: docker compose up db
-3, Open backend folder, use migrations: cd SolarWatch --> dotnet ef database update --context "SolarApiContext"     2, dotnet ef database update --context "UsersContext"
-4, Step back, run docker compose: cd ..  --> docker compose up
-5, Access the app: Open your browser, navigate to http://localhost:4000.
+
 
 
 

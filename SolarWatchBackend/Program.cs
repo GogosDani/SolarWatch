@@ -26,9 +26,7 @@ var connectionString = builder.Configuration["ConnectionString"];
 var issuer = builder.Configuration["ValidIssuer"];
 var audience = builder.Configuration["ValidAudience"];
 var jwtSecretKey = builder.Configuration["JwtSecretKey"];
-var adminUsername = builder.Configuration["AdminUsername"];
-var adminPassword = builder.Configuration["AdminPassword"];
-var adminEmail = builder.Configuration["AdminEmail"];
+
 // Call builder functions
         AddServices();
         ConfigureSwagger();

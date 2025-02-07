@@ -26,6 +26,7 @@ var connectionString = builder.Configuration["ConnectionString"];
 var issuer = builder.Configuration["ValidIssuer"];
 var audience = builder.Configuration["ValidAudience"];
 var jwtSecretKey = builder.Configuration["JwtSecretKey"];
+var frontendUrl = builder.Configuration["FrontendUrl"];
 
 // Call builder functions
         AddServices();
@@ -38,7 +39,7 @@ var jwtSecretKey = builder.Configuration["JwtSecretKey"];
 // Middlewares
         var app = builder.Build();
 
-    // Migration();
+        Migration();
 
         if (app.Environment.IsDevelopment())
         {
@@ -180,7 +181,7 @@ void AddAuthentication()
             {
                 options.AddPolicy("AllowFrontend",
                     builder => builder
-                        .WithOrigins("http://localhost:4000")
+                        .WithOrigins(frontendUrl)
                         .AllowAnyHeader()
                         .AllowAnyMethod());
             });
@@ -191,8 +192,14 @@ void AddAuthentication()
             {
                 var solarDb = scope.ServiceProvider.GetRequiredService<SolarApiContext>();
                 var usersDb = scope.ServiceProvider.GetRequiredService<UsersContext>();
-                solarDb.Database.Migrate();
-                usersDb.Database.Migrate();
+                if (solarDb.Database.GetPendingMigrations().Any())
+                {
+                    solarDb.Database.Migrate();
+                }
+                if (usersDb.Database.GetPendingMigrations().Any())
+                {
+                    usersDb.Database.Migrate();
+                }
             }
         }
 

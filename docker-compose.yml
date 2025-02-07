@@ -13,6 +13,10 @@ services:
       - .env
     ports:
       - "8080:8080"
+   # With depends_on, only start backend when the DB is running
+    depends_on:
+      db:
+        condition: service_healthy
 
   db:
     image: mcr.microsoft.com/mssql/server
@@ -20,3 +24,10 @@ services:
       - .env
     ports:
       - "1433:1433"
+    # Check if the DB server is available
+    healthcheck:
+      test: [ "CMD", "bash", "-c", "echo > /dev/tcp/localhost/1433" ]
+      interval: 30s
+      retries: 5
+      start_period: 30s
+      timeout: 10s

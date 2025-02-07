@@ -26,6 +26,7 @@ jobs:
           echo "JWTSECRETKEY=${{ secrets.JWTSECRETKEY }}" >> $GITHUB_ENV
           echo "VALID_AUDIENCE=${{ secrets.VALIDAUDIENCE }}" >> $GITHUB_ENV
           echo "VALID_ISSUER=${{ secrets.VALIDISSUER }}" >> $GITHUB_ENV
+          echo "FRONTENDURL=${{ secrets.FRONTENDURL }}" >> $GITHUB_ENV 
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
@@ -46,6 +47,7 @@ jobs:
           echo "ADMINUSERNAME=${{ secrets.ADMINUSERNAM}}" >> .env
           echo "ADMINPASSWORD=${{ secrets.ADMINPASSWORD}}" >> .env
           echo "ADMINEMAIL=${{ secrets.ADMINEMAIL}}" >> .env
+          echo "FRONTENDURL=${{ secrets.FRONTENDURL }}" >> .env
 
     - name: Log in to DockerHub
       uses: docker/login-action@v2

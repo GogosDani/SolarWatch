@@ -12,6 +12,7 @@ public class SolarApiContext : DbContext
     public DbSet<City> Cities { get; set; }
     public DbSet<Solar> Solars { get; set; }
 
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>

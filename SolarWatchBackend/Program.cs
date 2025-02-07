@@ -75,6 +75,7 @@ var frontendUrl = builder.Configuration["FrontendUrl"];
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddSingleton(new JwtSettings { SecretKey = jwtSecretKey });
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
             builder.Services.AddScoped<AuthenticationSeeder>();
 
         }
@@ -192,13 +193,20 @@ void AddAuthentication()
             {
                 var solarDb = scope.ServiceProvider.GetRequiredService<SolarApiContext>();
                 var usersDb = scope.ServiceProvider.GetRequiredService<UsersContext>();
-                if (solarDb.Database.GetPendingMigrations().Any())
+                if (solarDb.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
                 {
-                    solarDb.Database.Migrate();
+                    if (solarDb.Database.GetPendingMigrations().Any())
+                    {
+                        solarDb.Database.Migrate();
+                    }
                 }
-                if (usersDb.Database.GetPendingMigrations().Any())
+                
+                if (usersDb.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
                 {
-                    usersDb.Database.Migrate();
+                    if (usersDb.Database.GetPendingMigrations().Any())
+                    {
+                        usersDb.Database.Migrate();
+                    }
                 }
             }
         }

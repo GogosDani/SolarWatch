@@ -31,4 +31,9 @@ public class FavoriteRepository : IFavoriteRepository
         _context.Favorites.Remove(favorite);
         return await _context.SaveChangesAsync();
     }
+
+    public async Task<Favorite> GetFavoriteById(int id)
+    {
+        return await _context.Favorites.FirstOrDefaultAsync(f => f.Id == id);
+    }
 }

@@ -71,7 +71,9 @@ public class SolarApiContext : DbContext
 
         modelBuilder.Entity<Favorite>(entity =>
         {
-            entity.HasKey(f => new { f.UserId, f.SolarId });
+            entity.HasKey(f => f.Id); 
+            entity.HasIndex(f => new { f.UserId, f.SolarId }) 
+                .IsUnique();
             entity.HasOne(f => f.Solar)
                 .WithMany()
                 .HasForeignKey(f => f.SolarId);

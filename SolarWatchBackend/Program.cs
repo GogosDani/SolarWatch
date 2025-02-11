@@ -46,15 +46,15 @@ var frontendUrl = builder.Configuration["FrontendUrl"];
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+        using var scope = app.Services.CreateScope(); 
+        var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
+        authenticationSeeder.AddRoles();
+
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
         app.UseCors("AllowFrontend");
-
-        using var scope = app.Services.CreateScope(); 
-        var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
-        authenticationSeeder.AddRoles();
         app.Run();
         
 
@@ -73,6 +73,7 @@ var frontendUrl = builder.Configuration["FrontendUrl"];
             builder.Services.AddScoped<ISolarRepository, SolarRepository>();
             builder.Services.AddScoped<ICityRepository, CityRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
             builder.Services.AddSingleton(new JwtSettings { SecretKey = jwtSecretKey });
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
@@ -142,19 +143,6 @@ void AddAuthentication()
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(jwtSecretKey)
                 ),
-            };
-            options.Events = new JwtBearerEvents
-            {
-                OnTokenValidated = context =>
-                {
-                    var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
-                    var roleClaim = claimsIdentity.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name");
-                    if (roleClaim != null)
-                    {
-                        claimsIdentity.AddClaim(new Claim(ClaimsIdentity.DefaultRoleClaimType, roleClaim.Value));
-                    }
-                    return Task.CompletedTask;
-                }
             };
         });
 }

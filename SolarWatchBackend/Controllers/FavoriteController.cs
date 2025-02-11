@@ -29,7 +29,9 @@ public class FavoriteController : ControllerBase
             }
 
             var favorites = await _repository.GetFavoritesByUserId(userId);
-            return Ok(favorites);
+            // Create favorite responses (without userId)
+            var favoriteResponses = favorites.Select(f => new FavoriteResponse() { Id = f.Id, Solar = f.Solar });
+            return Ok(favoriteResponses);
         }
         catch (Exception ex)
         {
@@ -47,7 +49,6 @@ public class FavoriteController : ControllerBase
             {
                 return BadRequest("UserId not found.");
             }
-
             Favorite favorite = new() { SolarId = favoriteDto.SolarId, UserId = userId };
             var favorites = await _repository.AddFavorite(favorite);
             return Ok(favorites);
@@ -58,7 +59,7 @@ public class FavoriteController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}"), Authorize]
+    [HttpDelete("{favoriteId}"), Authorize]
     public async Task<IActionResult> RemoveFromFavorite(int favoriteId)
     {
         try

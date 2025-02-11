@@ -10,6 +10,7 @@ import SolarCreator from "./Pages/SolarCreator";
 import SolarEditor from "./Pages/SolarEditor";
 import CityEditor from "./Pages/CityEditor";
 import ProfilePage from "./Pages/ProfilePage";
+import "./index.css";
 
 const router = createBrowserRouter([
   {

@@ -1,7 +1,7 @@
 export default function ProfilePage() {
     return (
-        <>
-            <h1> PROFILE </h1>
-        </>
+        <div>
+            <h1 className="text-gray-700 bg-white"> PROFILE </h1>
+        </div>
     )
 }

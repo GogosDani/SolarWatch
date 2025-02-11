@@ -12,8 +12,7 @@ public class SolarApiContext : DbContext
     
     public DbSet<City> Cities { get; set; }
     public DbSet<Solar> Solars { get; set; }
-    public DbSet<Favorite> Favorites { get; set; }
-
+    public DbSet<Favorite> Favorites {get; set;}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -68,18 +67,11 @@ public class SolarApiContext : DbContext
                 new Solar(){Id = 10, Sunrise = "06:40", Sunset = "17:50", Date = new DateOnly(2024, 2, 7), CityId = 10}
             );
         });
-
         modelBuilder.Entity<Favorite>(entity =>
         {
-            entity.HasKey(f => f.Id); 
-            entity.HasIndex(f => new { f.UserId, f.SolarId }) 
-                .IsUnique();
             entity.HasOne(f => f.Solar)
                 .WithMany()
                 .HasForeignKey(f => f.SolarId);
-            entity.HasOne<IdentityUser>()
-                .WithMany()
-                .HasForeignKey(f => f.UserId);
         });
     }
 }

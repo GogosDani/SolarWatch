@@ -12,6 +12,12 @@ export default function MainApp() {
     const [info, setInfo] = useState({});
     const [isAdmin, setIsAdmin] = useState(false);
 
+    const getUserId = () => {
+        const token = localStorage.getItem("token");
+        const decodedToken = jwtDecode(token);
+        return decodedToken.sub;
+    };
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token == null) {
@@ -57,6 +63,7 @@ export default function MainApp() {
                     <div className="main-header">
                         {isAdmin && <button className="admin-button" onClick={() => navigate("/admin")}> ADMIN INTERFACE </button>}
                         <button className="logout-button" onClick={() => handleLogout()}> LOGOUT </button>
+                        <img className="profile-image" src="/profile.png" onClick={() => navigate(`/profile/${getUserId()}`)} />
                     </div>
                     <div className="main-app-div">
                         <div className="search-form-div">
@@ -80,6 +87,7 @@ export default function MainApp() {
                                             <p className="solar-data"> {info.sunrise} </p>
                                             <p className="solar-data"> SUNRISE </p>
                                         </div>
+                                        <button className="add-to-favorite"> Add To Favorite </button>
                                         <div className="right">
                                             <p className="solar-data"> {info.sunset} </p>
                                             <p className="solar-data"> SUNSET </p>

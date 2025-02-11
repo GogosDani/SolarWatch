@@ -5,11 +5,11 @@ import "./main.css";
 import FrontPage from "./Pages/FrontPage";
 import MainApp from "./Pages/MainApp";
 import AdminPage from "./Pages/AdminPage";
-import CityCreator from "./Pages/CityCreator"
-import SolarCreator from "./Pages/SolarCreator"
-import SolarEditor from "./Pages/SolarEditor"
-import CityEditor from "./Pages/CityEditor"
-
+import CityCreator from "./Pages/CityCreator";
+import SolarCreator from "./Pages/SolarCreator";
+import SolarEditor from "./Pages/SolarEditor";
+import CityEditor from "./Pages/CityEditor";
+import ProfilePage from "./Pages/ProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -39,12 +39,14 @@ const router = createBrowserRouter([
   {
     path: "/edit/city/:id",
     element: <CityEditor />
+  },
+  {
+    path: "/profile/:userId",
+    element: <ProfilePage />
   }
 ])
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-
   <RouterProvider router={router} />
-
 );

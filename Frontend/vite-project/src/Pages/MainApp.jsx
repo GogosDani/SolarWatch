@@ -11,6 +11,7 @@ export default function MainApp() {
     const [date, setDate] = useState("");
     const [info, setInfo] = useState({});
     const [isAdmin, setIsAdmin] = useState(false);
+    const [favoriteAdded, setFavoriteAdded] = useState(false);
 
     const getUserId = () => {
         const token = localStorage.getItem("token");
@@ -56,6 +57,24 @@ export default function MainApp() {
         navigate("/")
     }
 
+    async function AddToFavorite(solarId) {
+        try {
+            const response = await apiWithAuth.post(`/api/favorites/${solarId}`);
+            if (response.status === 200) {
+                setFavoriteAdded(true);
+
+                setTimeout(() => {
+                    setFavoriteAdded(false);
+                }, 5000);
+            } else {
+                console.error("Couldn't add to favorites!");
+            }
+        } catch (error) {
+            console.error("Error adding to favorites:", error);
+        }
+    }
+
+
     return (
         <>
             {errorMessage ? (<h1 className="error-message"> {errorMessage} </h1>) : (
@@ -87,7 +106,7 @@ export default function MainApp() {
                                             <p className="solar-data"> {info.sunrise} </p>
                                             <p className="solar-data"> SUNRISE </p>
                                         </div>
-                                        <button className="add-to-favorite"> Add To Favorite </button>
+                                        <button className="add-to-favorite" onClick={() => AddToFavorite(info.id)}> Add To Favorite </button>
                                         <div className="right">
                                             <p className="solar-data"> {info.sunset} </p>
                                             <p className="solar-data"> SUNSET </p>

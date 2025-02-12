@@ -39,8 +39,8 @@ public class FavoriteController : ControllerBase
         }
     }
 
-    [HttpPost, Authorize]
-    public async Task<IActionResult> AddFavorite([FromBody]FavoriteDto favoriteDto)
+    [HttpPost("{solarId}"), Authorize]
+    public async Task<IActionResult> AddFavorite(int solarId)
     {
         try
         {
@@ -49,7 +49,7 @@ public class FavoriteController : ControllerBase
             {
                 return BadRequest("UserId not found.");
             }
-            Favorite favorite = new() { SolarId = favoriteDto.SolarId, UserId = userId };
+            Favorite favorite = new() { SolarId = solarId, UserId = userId };
             var favorites = await _repository.AddFavorite(favorite);
             return Ok(favorites);
         }

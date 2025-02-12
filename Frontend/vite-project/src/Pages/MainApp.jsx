@@ -62,10 +62,9 @@ export default function MainApp() {
             const response = await apiWithAuth.post(`/api/favorites/${solarId}`);
             if (response.status === 200) {
                 setFavoriteAdded(true);
-
                 setTimeout(() => {
                     setFavoriteAdded(false);
-                }, 5000);
+                }, 3000);
             } else {
                 console.error("Couldn't add to favorites!");
             }
@@ -73,7 +72,6 @@ export default function MainApp() {
             console.error("Error adding to favorites:", error);
         }
     }
-
 
     return (
         <>
@@ -106,7 +104,13 @@ export default function MainApp() {
                                             <p className="solar-data"> {info.sunrise} </p>
                                             <p className="solar-data"> SUNRISE </p>
                                         </div>
-                                        <button className="add-to-favorite" onClick={() => AddToFavorite(info.id)}> Add To Favorite </button>
+                                        <div className="flex flex-col gap-5">
+                                            {favoriteAdded ? (<p className="text-green-600 font-bold relative left-2 w-40 h-8">
+                                                Successfully added
+                                            </p>) : (<p className="text-green-600 font-bold relative left-2  w-40 h-8">
+                                            </p>)}
+                                            <button className="add-to-favorite" onClick={() => AddToFavorite(info.id)}> Add To Favorites </button>
+                                        </div>
                                         <div className="right">
                                             <p className="solar-data"> {info.sunset} </p>
                                             <p className="solar-data"> SUNSET </p>
@@ -117,6 +121,7 @@ export default function MainApp() {
                             }
                         </div>
                     </div>
+
                 </>
             )}
         </>

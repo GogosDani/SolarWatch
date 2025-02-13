@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SolarWatch.Data;
 
@@ -11,9 +12,11 @@ using SolarWatch.Data;
 namespace SolarWatch.Migrations
 {
     [DbContext(typeof(SolarApiContext))]
-    partial class CityApiContextModelSnapshot : ModelSnapshot
+    [Migration("20250211082817_Add favorites table")]
+    partial class Addfavoritestable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,6 +225,28 @@ namespace SolarWatch.Migrations
                         });
                 });
 
+            modelBuilder.Entity("SolarWatch.Favorite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("SolarId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SolarId");
+
+                    b.ToTable("Favorites");
+                });
+
             modelBuilder.Entity("SolarWatch.Solar", b =>
                 {
                     b.Property<int>("Id")
@@ -331,6 +356,17 @@ namespace SolarWatch.Migrations
                             Sunrise = "06:40",
                             Sunset = "17:50"
                         });
+                });
+
+            modelBuilder.Entity("SolarWatch.Favorite", b =>
+                {
+                    b.HasOne("SolarWatch.Solar", "Solar")
+                        .WithMany()
+                        .HasForeignKey("SolarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Solar");
                 });
 
             modelBuilder.Entity("SolarWatch.Solar", b =>

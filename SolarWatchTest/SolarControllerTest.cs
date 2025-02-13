@@ -66,6 +66,7 @@ public class SolarControllerTest
         _solarInfoReader.Setup(x => x.GetSolarData(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<DateOnly>()))
             .ReturnsAsync("solar");
         _solarParser.Setup(x => x.Process(It.IsAny<string>(), It.IsAny<City>(), It.IsAny<DateOnly>())).Returns(solar);
+        _solarRepository.Setup(x => x.Get(It.IsAny<DateOnly>(), It.IsAny<int>())).ReturnsAsync(solar);
         var result = await _controller.GetSolarInfos("budapest", new DateOnly(2021, 12, 10));
         Assert.IsInstanceOf(typeof(OkObjectResult), result.Result);
         Assert.That(((OkObjectResult)result.Result).Value, Is.EqualTo(solar));

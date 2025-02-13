@@ -42,7 +42,7 @@ public class SolarWatchController : ControllerBase
                 // Get the city data from the API
                 var cityJson = await _cityDataProvider.GetCityData(cityName);
                 city =  _cityParser.Process(cityJson);
-                var cityId = _cityRepository.Add(city);
+                var cityId = await _cityRepository.Add(city);
                 // If we added the city to the DB just now, we should get the solar data from te API too.
                 solarData = await GetSolarDataFromApi(city, date);
             }
@@ -56,7 +56,6 @@ public class SolarWatchController : ControllerBase
                     solarData = await GetSolarDataFromApi(city, date);
                 }
             }
-            
             return Ok(solarData);
         }
         catch (CityDataException)
@@ -84,8 +83,9 @@ public class SolarWatchController : ControllerBase
     {
         var solarJson = await _solarInfoProvider.GetSolarData(city.Latitude, city.Longitude, date);
         var parsedSolar = _solarParser.Process(solarJson, city, date);
-        _solarRepository.Add(parsedSolar);
-        return parsedSolar;
+        await _solarRepository.Add(parsedSolar);
+        var solarDataFromDb = await _solarRepository.Get(date, city.Id);
+        return solarDataFromDb;
     }
 }
 

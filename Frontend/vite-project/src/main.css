@@ -7,7 +7,7 @@ body,
 }
 
 body {
-    background-image: url("./src/Pics/background.jpg");
+    background-image: url("/background.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -52,7 +52,7 @@ body {
 }
 
 .auth-form {
-    height: 35.625rem;
+    height: 40rem;
     width: 25rem;
     background-color: rgba(255, 255, 255, 0.13);
     position: absolute;
@@ -106,8 +106,6 @@ body {
     font-weight: bold;
     font-size: 1rem;
     cursor: pointer;
-    position: relative;
-    left: 22rem;
 }
 
 .submit-button {
@@ -168,7 +166,7 @@ body {
     border: none;
     background: var(--bg);
     color: var(--text-color);
-    padding: 1em;
+    padding: 0.5em;
     font-weight: bold;
     text-transform: uppercase;
     transition: 0.2s;
@@ -215,12 +213,6 @@ body {
     top: 3rem;
     background-color: rgba(255, 255, 255, 0.13);
 }
-
-
-
-
-
-
 
 .solar-info-div {
     height: 30%;
@@ -276,7 +268,7 @@ body {
 
 .admin-button {
     position: absolute;
-    right: 3rem;
+    right: 4rem;
     top: 0rem;
     height: 2.5rem;
     padding: 17px 40px;
@@ -434,9 +426,32 @@ body {
 }
 
 
-
 .failed-text {
     color: red;
     font-size: 1rem;
     font-weight: bold;
+}
+
+.profile-image {
+    height: 2rem;
+    position: absolute;
+    right: 3rem;
+}
+
+.add-to-favorite {
+    border: none;
+    height: 3rem;
+    width: 10rem;
+    align-items: center;
+    background-color: #06f;
+    border: 2px solid #06f;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    fill: #000;
+    font-family: Inter, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    justify-content: center;
 }

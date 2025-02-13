@@ -11,6 +11,13 @@ export default function MainApp() {
     const [date, setDate] = useState("");
     const [info, setInfo] = useState({});
     const [isAdmin, setIsAdmin] = useState(false);
+    const [favoriteAdded, setFavoriteAdded] = useState(false);
+
+    const getUserId = () => {
+        const token = localStorage.getItem("token");
+        const decodedToken = jwtDecode(token);
+        return decodedToken.sub;
+    };
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -50,6 +57,22 @@ export default function MainApp() {
         navigate("/")
     }
 
+    async function AddToFavorite(solarId) {
+        try {
+            const response = await apiWithAuth.post(`/api/favorites/${solarId}`);
+            if (response.status === 200) {
+                setFavoriteAdded(true);
+                setTimeout(() => {
+                    setFavoriteAdded(false);
+                }, 3000);
+            } else {
+                console.error("Couldn't add to favorites!");
+            }
+        } catch (error) {
+            console.error("Error adding to favorites:", error);
+        }
+    }
+
     return (
         <>
             {errorMessage ? (<h1 className="error-message"> {errorMessage} </h1>) : (
@@ -57,6 +80,7 @@ export default function MainApp() {
                     <div className="main-header">
                         {isAdmin && <button className="admin-button" onClick={() => navigate("/admin")}> ADMIN INTERFACE </button>}
                         <button className="logout-button" onClick={() => handleLogout()}> LOGOUT </button>
+                        <img className="profile-image" src="/profile.png" onClick={() => navigate(`/profile/${getUserId()}`)} />
                     </div>
                     <div className="main-app-div">
                         <div className="search-form-div">
@@ -80,6 +104,13 @@ export default function MainApp() {
                                             <p className="solar-data"> {info.sunrise} </p>
                                             <p className="solar-data"> SUNRISE </p>
                                         </div>
+                                        <div className="flex flex-col gap-5">
+                                            {favoriteAdded ? (<p className="text-green-600 font-bold relative left-2 w-40 h-8">
+                                                Successfully added
+                                            </p>) : (<p className="text-green-600 font-bold relative left-2  w-40 h-8">
+                                            </p>)}
+                                            <button className="add-to-favorite" onClick={() => AddToFavorite(info.id)}> Add To Favorites </button>
+                                        </div>
                                         <div className="right">
                                             <p className="solar-data"> {info.sunset} </p>
                                             <p className="solar-data"> SUNSET </p>
@@ -90,6 +121,7 @@ export default function MainApp() {
                             }
                         </div>
                     </div>
+
                 </>
             )}
         </>

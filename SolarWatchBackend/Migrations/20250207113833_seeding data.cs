@@ -50,16 +50,16 @@ namespace SolarWatch.Migrations
                 columns: new[] { "Id", "CityId", "Date", "Sunrise", "Sunset" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateOnly(2024, 2, 7), "06:30", "18:45" },
-                    { 2, 2, new DateOnly(2024, 2, 7), "07:15", "19:05" },
-                    { 3, 3, new DateOnly(2024, 2, 7), "07:45", "18:30" },
-                    { 4, 4, new DateOnly(2024, 2, 7), "06:50", "17:55" },
-                    { 5, 5, new DateOnly(2024, 2, 7), "06:55", "18:20" },
-                    { 6, 6, new DateOnly(2024, 2, 7), "07:10", "18:40" },
-                    { 7, 7, new DateOnly(2024, 2, 7), "06:20", "17:30" },
-                    { 8, 8, new DateOnly(2024, 2, 7), "08:15", "16:45" },
-                    { 9, 9, new DateOnly(2024, 2, 7), "07:50", "17:20" },
-                    { 10, 10, new DateOnly(2024, 2, 7), "06:40", "17:50" }
+                    { 1, 1, new DateOnly(2024, 2, 7), "06:30 AM", "18:45 PM" },
+                    { 2, 2, new DateOnly(2024, 2, 7), "07:15 AM", "19:05 PM" },
+                    { 3, 3, new DateOnly(2024, 2, 7), "07:45 AM", "18:30 PM" },
+                    { 4, 4, new DateOnly(2024, 2, 7), "06:50 AM", "17:55 PM" },
+                    { 5, 5, new DateOnly(2024, 2, 7), "06:55 AM", "18:20 PM" },
+                    { 6, 6, new DateOnly(2024, 2, 7), "07:10 AM", "18:40 PM" },
+                    { 7, 7, new DateOnly(2024, 2, 7), "06:20 AM", "17:30 PM" },
+                    { 8, 8, new DateOnly(2024, 2, 7), "08:15 AM", "16:45 PM" },
+                    { 9, 9, new DateOnly(2024, 2, 7), "07:50 AM", "17:20 PM" },
+                    { 10, 10, new DateOnly(2024, 2, 7), "06:40 AM", "17:50 PM" }
                 });
         }
 

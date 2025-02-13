@@ -31,35 +31,26 @@ export default function ProfilePage() {
                     </div>
                 </div>
             </div>
-            <div className="flex-[65] bg-white bg-opacity-15 border-2 border-[rgba(255,255,255,0.1)] rounded-3xl">
-                <table className="w-full table-fixed border-collapse">
-                    <thead className="h-16">
-                        <tr>
-                            <th className="w-1/5"></th>
-                            <th className="w-1/5"></th>
-                            <th className="w-1/5 text-2xl text-black font-bold">FAVORITES</th>
-                            <th className="w-1/5"></th>
-                            <th className="w-1/5"></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {favorites.map(f =>
-                            <tr className="even:bg-slate-300 odd:bg-slate-400">
-                                <td className="px-4 py-2 text-black font-bold">{f.solar.city.name}</td>
-                                <td className="px-4 py-2 text-black font-bold">{f.solar.date}</td>
-                                <td className="px-4 py-2 text-black font-bold">{f.solar.sunrise}</td>
-                                <td className="px-4 py-2 text-black font-bold">{f.solar.sunset}</td>
-                                <td className="px-4 py-2 text-black font-bold">
-                                    <button className="bg-red-500 text-white px-4 py-2 rounded">DELETE</button>
-                                </td>
-                            </tr>
-                        )}
-
-                    </tbody>
-                </table>
+            <div className="flex-[65] h-full bg-white bg-opacity-15 border-2 border-[rgba(255,255,255,0.1)] rounded-3xl flex flex-col">
+                <div className="text-black-500 text-2xl font-bold flex-[1] flex justify-center items-center"> FAVORITES </div>
+                <div className="h-full overflow-auto flex-[9]">
+                    <table className="w-full table-fixed border-collapse h-80">
+                        <tbody className="h-80">
+                            {favorites.map(f =>
+                                <tr key={f.id} className="even:bg-slate-300 odd:bg-slate-400">
+                                    <td className="px-4 py-2 text-black font-bold">{f.solar.city.name}</td>
+                                    <td className="px-4 py-2 text-black font-bold">{f.solar.date}</td>
+                                    <td className="px-4 py-2 text-black font-bold">{f.solar.sunrise}</td>
+                                    <td className="px-4 py-2 text-black font-bold">{f.solar.sunset}</td>
+                                    <td className="px-4 py-2 text-black font-bold">
+                                        <button className="bg-red-500 text-white px-4 py-2 rounded">DELETE</button>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div >
             </div>
         </div >
-
     )
 }

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using SolarWatch.DTOs;
@@ -17,7 +18,7 @@ public class UserController : ControllerBase
         _repository = repository;
     }
 
-    [HttpGet]
+    [HttpGet, Authorize]
     public async Task<ActionResult<UserResponse>> GetUserInfos()
     {
         var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -30,7 +31,7 @@ public class UserController : ControllerBase
         return Ok(userInfos);
     }
 
-    [HttpPatch]
+    [HttpPatch, Authorize]
     public async Task<IActionResult> ChangeUserPassword([FromBody] ChangePasswordRequest model)
     {
         var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

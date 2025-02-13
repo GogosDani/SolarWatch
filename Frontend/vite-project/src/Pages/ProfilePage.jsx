@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom"
+import { jwtDecode } from "jwt-decode";
 import { api, apiWithAuth } from "../Axios/api"
 import PasswordChangeForm from "../Components/PasswordChangeForm";
 export default function ProfilePage() {
@@ -7,6 +9,19 @@ export default function ProfilePage() {
     const [userData, setUserData] = useState({});
     const [showPwdChangeForm, setShowPwdChangeForm] = useState(false);
     const [successPwdChange, setSuccessPwdChange] = useState(false);
+    const userId = useParams();
+    const navigate = useNavigate();
+
+    // If we are not logged in or if we want to search for other user's page, it redirect us to the home page.
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token == null) navigate("/")
+        const decodedToken = jwtDecode(token);
+        if (decodedToken.sub !== userId.userId) {
+            navigate('/app');
+        }
+    }, [navigate])
+
 
     useEffect(() => {
         async function getFavorites() {

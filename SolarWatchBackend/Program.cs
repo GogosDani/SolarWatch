@@ -74,11 +74,11 @@ var frontendUrl = builder.Configuration["FrontendUrl"];
             builder.Services.AddScoped<ICityRepository, CityRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddSingleton(new JwtSettings { SecretKey = jwtSecretKey });
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
             builder.Services.AddScoped<AuthenticationSeeder>();
-
         }
 
         void ConfigureSwagger()

@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
-import { apiWithAuth } from "../Axios/api"
+import { api, apiWithAuth } from "../Axios/api"
+import PasswordChangeForm from "../Components/PasswordChangeForm";
 export default function ProfilePage() {
 
     const [favorites, setFavorites] = useState([]);
+    const [userData, setUserData] = useState({});
+    const [showPwdChangeForm, setShowPwdChangeForm] = useState(false);
+    const [successPwdChange, setSuccessPwdChange] = useState(false);
 
     useEffect(() => {
         async function getFavorites() {
@@ -15,6 +19,24 @@ export default function ProfilePage() {
             }
         }
         getFavorites();
+    }, [])
+
+    useEffect(() => {
+        async function getUserDatas() {
+            try {
+                const response = await apiWithAuth.get("/api/user");
+                if (response.status === 200) {
+                    setUserData(await response.data);
+                }
+                else {
+                    console.error("Couldn't get user data!")
+                }
+            }
+            catch (error) {
+                console.error("Something went wrong while fetching user datas:", error)
+            }
+        }
+        getUserDatas();
     }, [])
 
     async function deleteFavorite(favoriteId) {
@@ -31,18 +53,20 @@ export default function ProfilePage() {
         }
     }
 
+
     return (
         <div className="flex flex-row gap-5 mx-12 mt-12 w-[calc(100vw-6rem)] h-[calc(100vh-6rem)]">
             <div className="flex-[35] bg-white bg-opacity-15 border-2 border-[rgba(255,255,255,0.1)] rounded-3xl">
                 <img src="../../public/profile.png" className=" border-2 border-gray-300 rounded-full h-48 block mx-auto mt-4" />
                 <div className="px-8 mt-16">
-                    <p className="py-1 text-xl font-bold"> Username </p>
-                    <p className="py-1 text-xl font-bold"> Email </p>
-                    <p className="py-1 text-xl font-bold"> Password </p>
+                    <p className="py-1 text-xl font-bold"> Username: {userData.userName} </p>
+                    <p className="py-1 text-xl font-bold"> Email: {userData.email} </p>
+                    <p className="py-1 text-xl font-bold"> Password: **********  </p>
                     <div className="flex flex-row justify-between w-full mt-5">
-                        <button className="w-40 h-12 bg-blue-600 text-white font-bold px-4 py-2 rounded mt-5"> Profile Picture</button>
-                        <button className="w-40 h-12 bg-blue-600 text-white font-bold px-4 py-2 rounded mt-5"> Reset Password </button>
+                        <button className="w-44 h-12 bg-blue-600 text-white font-bold px-4 py-2 rounded mt-5"> Profile Picture</button>
+                        <button className="w-44 h-12 bg-blue-600 text-white font-bold px-4 py-2 rounded mt-5" onClick={() => setShowPwdChangeForm(true)}> Change Password </button>
                     </div>
+                    {successPwdChange && <p className="text-green-600 font-bold bg-white mt-2 text-center"> Password changed successfully </p>}
                 </div>
             </div>
             <div className="flex-[65] h-full bg-white bg-opacity-15 border-2 border-[rgba(255,255,255,0.1)] rounded-3xl flex flex-col">
@@ -67,6 +91,7 @@ export default function ProfilePage() {
                     </table>
                 </div >
             </div>
+            {showPwdChangeForm && <PasswordChangeForm setShowPwdChangeForm={setShowPwdChangeForm} setSuccessPwdChange={setSuccessPwdChange} />}
         </div>
     )
 }

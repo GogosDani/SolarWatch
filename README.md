@@ -51,50 +51,40 @@ Make sure you have the following installed:
 
 ### Using Docker
 
-1. Build docker compose: docker compose build
 
-2. Run DB: docker compose up db
 
-3. Open backend folder, use migrations: cd SolarWatchBackend --> dotnet ef database update --context "SolarApiContext"     2, dotnet ef database update --context "UsersContext"
-
-4. Create Frontend .env file, in frontend/vite-project folder, according to the .env.sample
+1. Create Frontend .env file, in frontend/vite-project folder, according to the .env.sample
         Should contain the backend URL
 
-5. Step back, run docker compose: cd ..  --> docker compose up
+2. Build docker compose: docker compose build
 
-6. Access the app: Open your browser, navigate to http://localhost:4000.
+3. docker compose up
+
+4. Access the app: Open your browser, navigate to http://localhost:4000.
 
 
 ### With Terminal
 
-1. Start the database using Docker:
+1. Start database
 
-           docker-compose up -d db
 
-   
-2. Navigate to the backend directory and use migrations:
-
-        cd SolarWatchBackend
-        dotnet ef database update --context "SolarApiContext"
-        dotnet ef database update --context "UsersContext"
-
-3. start the backend server:
+2. start the backend server:
 
         dotnet run
         remember the server URL
 
-4. Navigate to the frontend directory and create .env according to the .env.sample
+3. Navigate to the frontend directory and create .env according to the .env.sample
 
         cd ..
         cd frontend/vite-project
         .ENV file should contain the backend URL.
 
-5. Install npm and start the server
+4. Install npm and start the server
 
         npm install
         npm run dev
 
-6. Access the app: Open your browser, navigate to http://localhost:4000.
+5. Access the app: Open your browser, navigate to http://localhost:4000.
 
 
 

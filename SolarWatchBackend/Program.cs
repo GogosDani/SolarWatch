@@ -12,7 +12,7 @@ using SolarWatch.Services.Authentication;
 using SolarWatch.Services.JsonParsers;
 using SolarWatch.Services.Repositories;
 using dotenv.net;
-
+using SolarWatch;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +40,7 @@ var frontendUrl = builder.Configuration["FrontendUrl"];
         var app = builder.Build();
 
         Migration();
+        app.UseStaticFiles();
 
         if (app.Environment.IsDevelopment())
         {
@@ -150,7 +151,7 @@ void AddAuthentication()
         void AddIdentity()
         {
             builder.Services
-                .AddIdentityCore<IdentityUser>(options =>
+                .AddIdentityCore<ApplicationUser>(options =>
                 {
                     options.SignIn.RequireConfirmedAccount = false;
                     options.User.RequireUniqueEmail = true;

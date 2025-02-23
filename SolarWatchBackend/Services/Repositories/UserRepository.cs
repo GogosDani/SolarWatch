@@ -1,13 +1,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Identity.Client;
 using SolarWatch.DTOs;
+using SolarWatch.Exceptions;
 
 namespace SolarWatch.Services.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    private readonly UserManager<IdentityUser> _userManager;
-    public UserRepository(UserManager<IdentityUser> userManager)
+    private readonly UserManager<ApplicationUser> _userManager;
+    public UserRepository(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }
@@ -25,5 +26,13 @@ public class UserRepository : IUserRepository
         if(user == null) throw new InvalidOperationException("User not found");
         var result =  await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
         return result.Succeeded;
+    }
+
+    public async Task UpdateProfilePicture(string userId, string fileName)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if(user == null) throw new UserNotFoundException("User not found");
+        user.ProfilePicturePath = $"/uploads/{fileName}";
+        await _userManager.UpdateAsync(user);
     }
 }

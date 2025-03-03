@@ -18,7 +18,7 @@ public class TokenService : ITokenService
         _jwtSecretKey = jwtSettings.SecretKey;
     }
 
-    public string CreateToken(IdentityUser user, string role)
+    public string CreateToken(ApplicationUser user, string role)
     {
         var expiration = DateTime.UtcNow.AddMinutes(ExpirationMinutes);
         var token = CreateJwtToken(

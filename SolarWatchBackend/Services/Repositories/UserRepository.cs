@@ -6,8 +6,8 @@ namespace SolarWatch.Services.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    private readonly UserManager<IdentityUser> _userManager;
-    public UserRepository(UserManager<IdentityUser> userManager)
+    private readonly UserManager<ApplicationUser> _userManager;
+    public UserRepository(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }
@@ -24,6 +24,15 @@ public class UserRepository : IUserRepository
         var user = await _userManager.FindByIdAsync(userId);
         if(user == null) throw new InvalidOperationException("User not found");
         var result =  await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+        return result.Succeeded;
+    }
+
+    public async Task<bool> EditProfilePicture(string userId, string url)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)return false; 
+        user.ProfilePictureUrl = url;
+        var result = await _userManager.UpdateAsync(user);
         return result.Succeeded;
     }
 }

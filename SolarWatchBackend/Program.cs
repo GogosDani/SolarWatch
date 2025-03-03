@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using System.Text;
 using dotenv.net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,17 +10,19 @@ using SolarWatch.Services;
 using SolarWatch.Services.Authentication;
 using SolarWatch.Services.JsonParsers;
 using SolarWatch.Services.Repositories;
-using dotenv.net;
+using SolarWatch;
+using SolarWatch.Services.ProfilePicture;
 
-
-
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    ContentRootPath = AppContext.BaseDirectory,
+    WebRootPath = null 
+});
 
 DotEnv.Load();
 builder.Configuration.AddEnvironmentVariables();
 
-
-// Variables from usersecrets or appsettings
+// Variables from dotenv
 var connectionString = builder.Configuration["ConnectionString"];
 var issuer = builder.Configuration["ValidIssuer"];
 var audience = builder.Configuration["ValidAudience"];
@@ -56,9 +57,6 @@ var frontendUrl = builder.Configuration["FrontendUrl"];
         app.MapControllers();
         app.UseCors("AllowFrontend");
         app.Run();
-        
-
-
 
 // BUILDER FUNCTIONS
 
@@ -75,6 +73,7 @@ var frontendUrl = builder.Configuration["FrontendUrl"];
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IS3Service, S3Service>();
             builder.Services.AddSingleton(new JwtSettings { SecretKey = jwtSecretKey });
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
@@ -150,7 +149,7 @@ void AddAuthentication()
         void AddIdentity()
         {
             builder.Services
-                .AddIdentityCore<IdentityUser>(options =>
+                .AddIdentityCore<ApplicationUser>(options =>
                 {
                     options.SignIn.RequireConfirmedAccount = false;
                     options.User.RequireUniqueEmail = true;
@@ -198,10 +197,6 @@ void AddAuthentication()
                 }
             }
         }
-
-
-
         public partial class Program
         {
-            
         }

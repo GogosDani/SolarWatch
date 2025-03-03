@@ -119,7 +119,7 @@ public class ControllerIntegrationTest
     
     private string GenerateJwtToken(string role = "User")
     {
-        var user = new IdentityUser(){UserName = "TestUser", Email = "TestEmail"};
+        var user = new ApplicationUser{UserName = "TestUser", Email = "TestEmail"};
         return _tokenService.CreateToken(user, role);
     }
 

@@ -67,7 +67,7 @@ public class UserController : ControllerBase
             using var fileStream = picture.OpenReadStream();
             var fileUrl = await _service.UploadFileAsync(fileStream, fileName);
             var succeed = await _repository.EditProfilePicture(userId, fileUrl);
-            if (succeed) return Ok();
+            if (succeed) return Ok(fileUrl);
             return BadRequest();
         }
         catch (Exception ex)

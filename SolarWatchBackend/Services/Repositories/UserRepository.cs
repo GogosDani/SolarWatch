@@ -16,7 +16,7 @@ public class UserRepository : IUserRepository
     {
         var user =  await _userManager.FindByIdAsync(id);
         if(user == null) throw new InvalidOperationException("User not found");
-        return new UserResponse(){email = user.Email, UserName = user.UserName};
+        return new UserResponse(){Email = user.Email, UserName = user.UserName, ProfilePictureUrl = user.ProfilePictureUrl};
     }
 
     public async Task<bool> ChangePassword(string currentPassword, string newPassword, string userId)

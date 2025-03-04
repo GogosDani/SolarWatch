@@ -113,7 +113,7 @@ export default function ProfilePage() {
             <button type="button" class="text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm  text-center w-24 h-8 absolute top-2 left-2" onClick={() => navigate("/app")}> BACK </button>
             <div className="flex flex-row gap-5 mx-12 mt-12 w-[calc(100vw-6rem)] h-[calc(100vh-6rem)]">
                 <div className="flex-[35] bg-white bg-opacity-15 border-2 border-[rgba(255,255,255,0.1)] rounded-3xl">
-                    <img src={userData.profilePictureUrl} className=" border-2 border-gray-300 rounded-full h-48 w-48 block mx-auto mt-4" />
+                    <img src={userData.profilePictureUrl != null ? userData.profilePictureUrl : "../public/profile.jpg"} className=" border-2 border-gray-300 rounded-full h-48 w-48 block mx-auto mt-4" />
                     <div className="px-8 mt-16">
                         <p className="py-1 text-xl font-bold"> Username: {userData.userName} </p>
                         <p className="py-1 text-xl font-bold"> Email: {userData.email} </p>

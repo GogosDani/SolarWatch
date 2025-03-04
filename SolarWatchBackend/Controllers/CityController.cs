@@ -15,7 +15,7 @@ public class CityController : ControllerBase
         _cityRepository = cityRepository;
     }
 
-    [HttpGet("{id}"), Authorize(Roles = "admin")]
+    [HttpGet("{id}"), Authorize(Roles = "Admin")]
     public async Task<ActionResult> GetCityById(int id)
     {
         try
@@ -29,7 +29,7 @@ public class CityController : ControllerBase
         }
     }
     
-    [HttpPost(), Authorize(Roles = "admin")]
+    [HttpPost(), Authorize(Roles = "Admin")]
     public async Task<ActionResult> Post([FromBody] City city)
     {
         try
@@ -43,7 +43,7 @@ public class CityController : ControllerBase
         }
     }
     
-    [HttpDelete("{id}"), Authorize(Roles = "admin")]
+    [HttpDelete("{id}"), Authorize(Roles = "Admin")]
     public async Task<ActionResult> DeleteCity(int id)
     {
         try
@@ -57,7 +57,7 @@ public class CityController : ControllerBase
         }
     }
     
-    [HttpPut(), Authorize(Roles = "admin")]
+    [HttpPut(), Authorize(Roles = "Admin")]
     public async Task<ActionResult> EditCity([FromBody] City city)
     {
         try
@@ -71,7 +71,7 @@ public class CityController : ControllerBase
         }
     }
 
-    [HttpGet("/api/city/page/{pageNumber}"), Authorize(Roles = "admin")] 
+    [HttpGet("/api/city/page/{pageNumber}"), Authorize(Roles = "Admin")] 
     public async Task<ActionResult> GetByPage(int pageNumber)
     {
         try

@@ -5,12 +5,10 @@ namespace SolarWatch.Data;
 public class AuthenticationSeeder
 {
     private RoleManager<IdentityRole> roleManager;
-    private UserManager<IdentityUser> userManager;
 
-    public AuthenticationSeeder(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+    public AuthenticationSeeder(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
     {
         this.roleManager = roleManager;
-        this.userManager = userManager;
     }
     
     public void AddRoles()

@@ -11,17 +11,15 @@ using SolarWatch.Services;
 using SolarWatch.Services.Authentication;
 using SolarWatch.Services.JsonParsers;
 using SolarWatch.Services.Repositories;
-using dotenv.net;
-
-
+using SolarWatch;
+using SolarWatch.Services.ProfilePicture;
 
 var builder = WebApplication.CreateBuilder(args);
 
 DotEnv.Load();
 builder.Configuration.AddEnvironmentVariables();
 
-
-// Variables from usersecrets or appsettings
+// Variables from dotenv
 var connectionString = builder.Configuration["ConnectionString"];
 var issuer = builder.Configuration["ValidIssuer"];
 var audience = builder.Configuration["ValidAudience"];
@@ -56,9 +54,6 @@ var frontendUrl = builder.Configuration["FrontendUrl"];
         app.MapControllers();
         app.UseCors("AllowFrontend");
         app.Run();
-        
-
-
 
 // BUILDER FUNCTIONS
 
@@ -75,6 +70,7 @@ var frontendUrl = builder.Configuration["FrontendUrl"];
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IS3Service, S3Service>();
             builder.Services.AddSingleton(new JwtSettings { SecretKey = jwtSecretKey });
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
@@ -144,13 +140,26 @@ void AddAuthentication()
                     Encoding.UTF8.GetBytes(jwtSecretKey)
                 ),
             };
+            options.Events = new JwtBearerEvents
+            {
+                OnTokenValidated = context =>
+                {
+                    var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+                    var roleClaim = claimsIdentity.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name");
+                    if (roleClaim != null)
+                    {
+                        claimsIdentity.AddClaim(new Claim(ClaimsIdentity.DefaultRoleClaimType, roleClaim.Value));
+                    }
+                    return Task.CompletedTask;
+                }
+            };
         });
 }
 
         void AddIdentity()
         {
             builder.Services
-                .AddIdentityCore<IdentityUser>(options =>
+                .AddIdentityCore<ApplicationUser>(options =>
                 {
                     options.SignIn.RequireConfirmedAccount = false;
                     options.User.RequireUniqueEmail = true;
@@ -198,10 +207,6 @@ void AddAuthentication()
                 }
             }
         }
-
-
-
         public partial class Program
         {
-            
         }

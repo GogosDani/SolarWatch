@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using SolarWatch.DTOs;
+using SolarWatch.Services.ProfilePicture;
 using SolarWatch.Services.Repositories;
 
 namespace SolarWatch.Controllers;
@@ -12,10 +13,12 @@ namespace SolarWatch.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserRepository _repository;
+    private readonly IS3Service _service;
 
-    public UserController(IUserRepository repository)
+    public UserController(IUserRepository repository, IS3Service service)
     {
         _repository = repository;
+        _service = service;
     }
 
     [HttpGet, Authorize]
@@ -47,5 +50,29 @@ public class UserController : ControllerBase
         }
 
         return Ok("Password changed successfully.");
+    }
+
+    [HttpPost("/api/profile-picture"), Authorize]
+    public async Task<IActionResult> UploadProfilePicture(IFormFile picture)
+    {
+        try
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("UserId not found.");
+            }
+            var fileExtension = Path.GetExtension(picture.FileName);
+            var fileName = $"{userId}_profile{fileExtension}";
+            using var fileStream = picture.OpenReadStream();
+            var fileUrl = await _service.UploadFileAsync(fileStream, fileName);
+            var succeed = await _repository.EditProfilePicture(userId, fileUrl);
+            if (succeed) return Ok(fileUrl);
+            return BadRequest();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

@@ -10,6 +10,7 @@ SOLARWATCH allows users to register and log in to explore sunrise and sunset dat
 - **Admin Page**: Registered admins can:
   - Add, edit, or delete data in the database.
   - Access admin-only features through a protected interface.
+- **Profile Page**: Add/Remove favorite solar datas, change profile picture (AWS S3), change password.
 
 ## Built With
 
@@ -26,10 +27,13 @@ SOLARWATCH allows users to register and log in to explore sunrise and sunset dat
 ![Main User Interface](https://github.com/user-attachments/assets/8ba6218e-395e-41db-893f-4a7d91242cd3)
 
 ### Forecast Input Screen
-![Forecast Input Screen](https://github.com/user-attachments/assets/2495d7a6-92fb-41ef-9c33-2b66ba03a3ca)
+![Forecast Input Screen](https://github.com/user-attachments/assets/7298bfdf-68f9-46d0-8c5d-e40bc2fb4481)
 
 ### Admin Dashboard
 ![Admin Dashboard](https://github.com/user-attachments/assets/8aaa5f61-7671-4ec0-8ad2-565475b7d1ff)
+
+### Profile Page
+![ProfilePage](https://github.com/user-attachments/assets/769eacf7-0df3-455a-8557-8a2cb86a9e88)
 
 ---
 

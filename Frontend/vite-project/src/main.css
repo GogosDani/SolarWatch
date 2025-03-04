@@ -269,19 +269,16 @@ body {
 .admin-button {
     position: absolute;
     right: 4rem;
-    top: 0rem;
-    height: 2.5rem;
-    padding: 17px 40px;
+    top: 0.5rem;
+    height: 2rem;
+    width: 14rem;
     border-radius: 10px;
     border: 0;
     background-color: rgb(255, 56, 86);
     letter-spacing: 1.5px;
     font-size: 15px;
-    transition: all 0.3s ease;
-    box-shadow: rgb(201, 46, 70) 0px 10px 0px 0px;
     color: hsl(0, 0%, 100%);
     cursor: pointer;
-
 }
 
 .admin-button:hover {
@@ -435,7 +432,7 @@ body {
 .profile-image {
     height: 2rem;
     position: absolute;
-    right: 3rem;
+    right: 1rem;
 }
 
 .add-to-favorite {

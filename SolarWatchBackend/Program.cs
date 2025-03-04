@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using dotenv.net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,11 +14,7 @@ using SolarWatch.Services.Repositories;
 using SolarWatch;
 using SolarWatch.Services.ProfilePicture;
 
-var builder = WebApplication.CreateBuilder(new WebApplicationOptions
-{
-    ContentRootPath = AppContext.BaseDirectory,
-    WebRootPath = null 
-});
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions());
 
 DotEnv.Load();
 builder.Configuration.AddEnvironmentVariables();
@@ -142,6 +139,19 @@ void AddAuthentication()
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(jwtSecretKey)
                 ),
+            };
+            options.Events = new JwtBearerEvents
+            {
+                OnTokenValidated = context =>
+                {
+                    var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+                    var roleClaim = claimsIdentity.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name");
+                    if (roleClaim != null)
+                    {
+                        claimsIdentity.AddClaim(new Claim(ClaimsIdentity.DefaultRoleClaimType, roleClaim.Value));
+                    }
+                    return Task.CompletedTask;
+                }
             };
         });
 }

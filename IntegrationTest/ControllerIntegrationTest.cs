@@ -71,7 +71,7 @@ public class ControllerIntegrationTest
     [Fact]
     public async Task CityPostTestWithAdminToken()
     {
-        var token = GenerateJwtToken("admin");
+        var token = GenerateJwtToken("Admin");
         var request = new HttpRequestMessage(HttpMethod.Post, "/api/city");
         request.Headers.Add("Authorization", $"Bearer {token}");
         City city = new City(){Id = 100, Name = "Túrkeve", Longitude = 53.532, Latitude = 53.42};
@@ -88,7 +88,7 @@ public class ControllerIntegrationTest
     [Fact]
     public async Task SolarPostWithAdminToken()
     {
-        var token = GenerateJwtToken("admin");
+        var token = GenerateJwtToken("Admin");
         var request = new HttpRequestMessage(HttpMethod.Post, "/api/solar");
         request.Headers.Add("Authorization", $"Bearer {token}");
         Solar solar = new Solar(){City = new City(){Id = 100, Latitude = 34.432, Longitude = 53.53, Name = "Kaposvár"}, CityId = 1, Sunrise = "5:52:52 AM", Sunset = "5:52:52 PM", Id = 100, Date = new DateOnly(2024,12,12)};
@@ -105,7 +105,7 @@ public class ControllerIntegrationTest
     [Fact]
     public async Task SolarDeleteWithAdminToken()
     {
-        var token = GenerateJwtToken("admin");
+        var token = GenerateJwtToken("Admin");
         var request = new HttpRequestMessage(HttpMethod.Delete, "/api/solar/1");
         request.Headers.Add("Authorization", $"Bearer {token}");
         var response = await _client.SendAsync(request);

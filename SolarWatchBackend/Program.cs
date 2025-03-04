@@ -14,7 +14,7 @@ using SolarWatch.Services.Repositories;
 using SolarWatch;
 using SolarWatch.Services.ProfilePicture;
 
-var builder = WebApplication.CreateBuilder(new WebApplicationOptions());
+var builder = WebApplication.CreateBuilder(args);
 
 DotEnv.Load();
 builder.Configuration.AddEnvironmentVariables();

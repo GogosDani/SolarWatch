@@ -32,7 +32,6 @@ export default function CityCreator() {
         if (response.status == 200) {
             navigate("/admin")
         }
-        console.log("aaaa" + response.statusText);
     }
 
     return (

@@ -60,11 +60,15 @@ Make sure you have the following installed:
 1. Create Frontend .env file, in frontend/vite-project folder, according to the .env.sample
         Should contain the backend URL
 
-2. Build docker compose: docker compose build
+2. Build docker compose:
+   
+       docker compose build
 
-3. docker compose up
+4. Start docker compose:
 
-4. Access the app: Open your browser, navigate to http://localhost:4000.
+         docker compose up
+
+6. Access the app: Open your browser, navigate to http://localhost:4000.
 
 
 ### With Terminal

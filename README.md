@@ -40,9 +40,12 @@ SOLARWATCH allows users to register and log in to explore sunrise and sunset dat
 ## Prerequisites
 
 Make sure you have the following installed:
-1. [Docker](https://www.docker.com/)
-2. [Node.js](https://nodejs.org/)
-3. [.NET 8 SDK](https://dotnet.microsoft.com/)
+
+[![Docker][Docker]](https://www.docker.com/)
+
+[![Node.js][Node.js]](https://nodejs.org/)
+
+[![.NET 8 SDK][.NET]](https://dotnet.microsoft.com/)
 
 ---
 
@@ -92,7 +95,12 @@ Make sure you have the following installed:
         npm install
         npm run dev
 
-5. Access the app: Open your browser, navigate to http://localhost:4000.
+   <!--Links for logos! -->
+[Docker]: https://img.shields.io/badge/Docker-blue?style=plastic&logo=docker&logoColor=darkblue
+[Node.js]: https://img.shields.io/badge/Node.js-black?style=plastic&logo=nodedotjs&logoColor=green
+[.NET]: https://img.shields.io/badge/.NET_8_SDK-darkblue?style=plastic&logo=dotnet&logoColor=white&labelColor=purple
+
+6. Access the app: Open your browser, navigate to http://localhost:4000.
 
 
 
